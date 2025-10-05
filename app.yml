@@ -1,0 +1,51 @@
+name: fonsave-app
+region: sgp
+features:
+  - buildpack-stack=ubuntu-22
+
+static_sites:
+  - name: fonsave
+    source_dir: /
+    output_dir: dist
+    catchall_document: index.html  # This must be at the component level
+    build_command: npm run build
+    environment_slug: node-js
+    envs:
+      - key: VITE_API_BASE_URL
+        scope: BUILD_TIME
+        value: https://fonesave-backend-wzksw.ondigitalocean.app/api
+      - key: VITE_APP_NAME
+        scope: BUILD_TIME
+        value: fonsave
+      - key: VITE_APP_VERSION
+        scope: BUILD_TIME
+        value: 1.0.0
+      - key: VITE_ENABLE_ANALYTICS
+        scope: BUILD_TIME
+        value: "true"
+      - key: VITE_ENABLE_DEBUG
+        scope: BUILD_TIME
+        value: "false"
+      - key: VITE_GOOGLE_AUTH_URL
+        scope: BUILD_TIME
+        value: auth/google
+      - key: VITE_COOKIE_DOMAIN
+        scope: BUILD_TIME
+        value: .fonesave.com
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: Amricpaul/fonsave
+    routes:
+      - path: /
+      - path: /login
+      - path: /dashboard
+      - path: /*  # Catch-all route for SPA
+
+ingress:
+  rules:
+    - component:
+        name: fonsave
+      match:
+        path:
+          prefix: /
