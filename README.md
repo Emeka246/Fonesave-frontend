@@ -4,27 +4,24 @@ FonSave is a web platform that allows users to register, manage their devices, a
 This repository contains the **frontend application**, built with **Vite + React**, which communicates with the FonSave backend API.
 
 ---
+# dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-## 🚀 Features
-- User registration, login, and authentication
-- Email verification flow
-- Device management
-- Payment integration with Paystack
-- Responsive UI for mobile and desktop
+# production build
+dist/
+build/
 
----
+# local env files
+.env
+.env.local
+.env.development
+.env.production
 
-## 🛠️ Tech Stack
-- **React** (Vite)
-- **TypeScript**
-- **Tailwind CSS** (if used)
-- **Axios** for API calls
+# misc
+.DS_Store
+*.log
 
----
-
-## 📦 Installation & Setup
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/Emeka246/fonesave-frontend.git
-   cd fonesave-frontend
 
