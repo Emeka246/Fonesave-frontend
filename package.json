@@ -1,11 +1,11 @@
 {
   "name": "fonsave-frontend",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "echo \"No tests specified\" && exit 0",
     "preview": "vite preview",
