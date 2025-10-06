@@ -23,20 +23,26 @@ class ConfigService {
   }
 
   private loadConfig(): AppConfig {
+    // Prefer VITE_API_BASE_URL, fall back to VITE_API_URL, then default localhost
+    const baseUrl =
+      import.meta.env.VITE_API_BASE_URL ||
+      import.meta.env.VITE_API_URL ||
+      "http://localhost:4000/api";
+
     return {
-      apiBaseUrl: this.getEnvVar('VITE_API_BASE_URL', 'http://localhost:4000/api'),
-      appName: this.getEnvVar('VITE_APP_NAME', 'FonSave'),
-      appVersion: this.getEnvVar('VITE_APP_VERSION', '1.0.0'),
-      enableAnalytics: this.getBooleanEnvVar('VITE_ENABLE_ANALYTICS', false),
-      enableDebug: this.getBooleanEnvVar('VITE_ENABLE_DEBUG', false),
-      googleAuthUrl: `${this.getEnvVar('VITE_API_BASE_URL', 'http://localhost:4000/api')}/${this.getOptionalEnvVar('VITE_GOOGLE_AUTH_URL')}`,
-      cookieDomain: this.getOptionalEnvVar('VITE_COOKIE_DOMAIN'),
+      apiBaseUrl: baseUrl,
+      appName: this.getEnvVar("VITE_APP_NAME", "FonSave"),
+      appVersion: this.getEnvVar("VITE_APP_VERSION", "1.0.0"),
+      enableAnalytics: this.getBooleanEnvVar("VITE_ENABLE_ANALYTICS", false),
+      enableDebug: this.getBooleanEnvVar("VITE_ENABLE_DEBUG", false),
+      googleAuthUrl: `${baseUrl}/${this.getOptionalEnvVar("VITE_GOOGLE_AUTH_URL") || ""}`,
+      cookieDomain: this.getOptionalEnvVar("VITE_COOKIE_DOMAIN"),
     };
   }
 
   private getEnvVar(key: string, defaultValue: string): string {
     const value = import.meta.env[key];
-    if (value === undefined || value === '') {
+    if (value === undefined || value === "") {
       return defaultValue;
     }
     return value;
@@ -44,15 +50,15 @@ class ConfigService {
 
   private getOptionalEnvVar(key: string): string | undefined {
     const value = import.meta.env[key];
-    return value === undefined || value === '' ? undefined : value;
+    return value === undefined || value === "" ? undefined : value;
   }
 
   private getBooleanEnvVar(key: string, defaultValue: boolean): boolean {
     const value = import.meta.env[key];
-    if (value === undefined || value === '') {
+    if (value === undefined || value === "") {
       return defaultValue;
     }
-    return value.toLowerCase() === 'true';
+    return value.toLowerCase() === "true";
   }
 
   // Getters for easy access
@@ -75,6 +81,7 @@ class ConfigService {
   get enableDebug(): boolean {
     return this.config.enableDebug;
   }
+
   get googleAuthUrl(): string | undefined {
     return this.config.googleAuthUrl;
   }
@@ -96,7 +103,11 @@ class ConfigService {
   }
 
   // Get all config for debugging
-  getAll(): AppConfig & { isDevelopment: boolean; isProduction: boolean; mode: string } {
+  getAll(): AppConfig & {
+    isDevelopment: boolean;
+    isProduction: boolean;
+    mode: string;
+  } {
     return {
       ...this.config,
       isDevelopment: this.isDevelopment,
