@@ -23,4 +23,8 @@ export default defineConfig({
       'www.fonsave.com'                     // ✅ www version
     ],
   },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  },
 })
