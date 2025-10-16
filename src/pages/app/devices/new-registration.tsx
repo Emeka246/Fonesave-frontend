@@ -251,6 +251,8 @@ export default function NewRegistrationPage() {
         devicePayload.isOwnerSelfRegistration = formData.isOwnerSelfRegistration || false;
       }
 
+      console.log(devicePayload)
+
       // Make API call to create device
       const response: ApiResponse = await DeviceService.createDevice(devicePayload);
       
@@ -259,7 +261,7 @@ export default function NewRegistrationPage() {
         if (response.data.data?.payment) {
           // We have payment data
           const { device, payment, deviceRegistration } = response.data.data;
-          
+          console.log(payment)
           
           if (isAgent()) {
             // Payment was processed from wallet or was a free registration
