@@ -15,13 +15,13 @@ import { deviceBrands, deviceConditions, operatingSystems, deviceStatuses } from
 import DeviceStatusSelector from "@/components/common/device/device-status-selector"
 
 
-import { 
-  IconDeviceMobile, 
-  IconAlertCircle, 
+import {
+  IconDeviceMobile,
+  IconAlertCircle,
   IconWallet,
   IconGift
 } from "@tabler/icons-react"
-import DeviceService, {DeviceRegistrationPayload} from "@/services/device.service"
+import DeviceService, { DeviceRegistrationPayload } from "@/services/device.service"
 import PaymentService from "@/services/payment.service"
 import { useAuth } from "@/hooks/use-auth"
 import { toast } from "sonner"
@@ -95,10 +95,10 @@ export default function NewRegistrationPage() {
   const [errors, setErrors] = useState<DeviceFormErrors>({})
   const [imeiValidations, setImeiValidations] = useState<(boolean | null)[]>([null, null])
 
-  const [agentRegistrationStats, setAgentRegistrationStats] = useState<AgentRegistrationStats>({ 
-    totalRegistrations: 0, 
-    paidRegistrations: 0, 
-    freeRegistrationsEarned: 0, 
+  const [agentRegistrationStats, setAgentRegistrationStats] = useState<AgentRegistrationStats>({
+    totalRegistrations: 0,
+    paidRegistrations: 0,
+    freeRegistrationsEarned: 0,
     freeRegistrationsUsed: 0,
     hasFreeRegistrations: false,
     balance: 0,
@@ -125,7 +125,7 @@ export default function NewRegistrationPage() {
     // Define the order of fields to check for errors
     const fieldOrder = [
       'imei1',
-      'imei2', 
+      'imei2',
       'deviceBrand',
       'deviceModel',
       'deviceCondition',
@@ -141,9 +141,9 @@ export default function NewRegistrationPage() {
         if (element) {
           // Add a small delay to ensure DOM has updated
           setTimeout(() => {
-            element.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center' 
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
             })
             element.focus()
           }, 100)
@@ -158,7 +158,7 @@ export default function NewRegistrationPage() {
 
     // Validate IMEI1 and IMEI2
     const imeiErrors: string[] = ["", ""]
-    
+
     // Validate primary IMEI (required)
     const primaryImei = formData.imei1;
     if (!primaryImei.trim()) {
@@ -166,7 +166,7 @@ export default function NewRegistrationPage() {
     } else if (!/^\d{15}$/.test(primaryImei)) {
       imeiErrors[0] = "IMEI must be exactly 15 digits"
     }
-    
+
     // Validate secondary IMEI (optional)
     const secondaryImei = formData.imei2;
     if (secondaryImei && secondaryImei.trim() && !/^\d{15}$/.test(secondaryImei)) {
@@ -194,7 +194,7 @@ export default function NewRegistrationPage() {
     if (!formData.deviceStatus) {
       newErrors.deviceStatus = "Device status is required"
     }
-    
+
     // Validate owner email for agents (only when not self-registering)
     if (isAgent() && !formData.isOwnerSelfRegistration && !formData.ownerEmail?.trim()) {
       newErrors.ownerEmail = "Owner email is required when registering for others"
@@ -205,24 +205,24 @@ export default function NewRegistrationPage() {
     }
 
     setErrors(newErrors)
-    
+
     // Scroll to first error if validation fails
     if (Object.keys(newErrors).length > 0) {
       scrollToFirstError(newErrors)
     }
-    
+
     return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
 
     setIsSubmitting(true)
-    
+
     try {
       // Transform form data to match API payload structure
       const devicePayload: DeviceRegistrationPayload = {
@@ -242,7 +242,7 @@ export default function NewRegistrationPage() {
         emergencyContact: formData.emergencyContact || undefined,
       }
 
-      if(isAgent()) {
+      if (isAgent()) {
         if (!formData.isOwnerSelfRegistration) {
           devicePayload.ownerEmail = formData.ownerEmail || undefined;
           devicePayload.ownerPhone = formData.ownerPhone || undefined;
@@ -255,28 +255,33 @@ export default function NewRegistrationPage() {
 
       // Make API call to create device
       const response: ApiResponse = await DeviceService.createDevice(devicePayload);
-      
+
       if (response.data?.success) {
         // Determine if we got back a device with payment data or just a device
         if (response.data.data?.payment) {
           // We have payment data
           const { device, payment, deviceRegistration } = response.data.data;
           console.log(payment)
-          
+
           if (isAgent()) {
             // Payment was processed from wallet or was a free registration
             toast.success(
-              deviceRegistration.isFreeRegistration 
-                ? 'Device registered successfully using a free registration!' 
-                : 'Device registered successfully! Payment processed from your wallet.'
+              deviceRegistration.isFreeRegistration
+                ? 'Device registered successfully using a free registration!'
+                : 'Registration email sent to the user! (Check spam folder) Payment will be processed from your wallet.',
+              {
+                duration: 10000, // show for 10 seconds
+              }
             );
-                         // Refresh agent wallet and stats
-             loadAgentWalletAndStats();
-             // Scroll to top and redirect to dashboard
-             window.scrollTo({ top: 0, behavior: 'smooth' });
-             navigate('/dashboard');
+
+            // Refresh agent wallet and stats
+            loadAgentWalletAndStats();
+
+            // Scroll to top and redirect to dashboard
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            navigate('/dashboard');
           }
-          else{
+          else {
             if (payment.authorizationUrl) {
               // Store relevant payment data in sessionStorage
               sessionStorage.setItem('devicePayment', JSON.stringify({
@@ -285,10 +290,10 @@ export default function NewRegistrationPage() {
                 paymentReference: payment.reference,
                 returnUrl: '/dashboard'
               }));
-              
+
               // Redirect to payment page
               window.location.href = payment.authorizationUrl;
-            } 
+            }
           }
 
         } else {
@@ -302,8 +307,8 @@ export default function NewRegistrationPage() {
       }
     } catch (error: any) {
       console.error('Error during device registration:', error);
-      
-     
+
+
       // Handle other errors
       const errorMessage = error?.data?.message || error?.message || 'An error occurred while registering the device';
       toast.error(errorMessage);
@@ -318,7 +323,7 @@ export default function NewRegistrationPage() {
       loadAgentWalletAndStats()
     }
   }, [])
-  
+
 
   const loadAgentWalletAndStats = async () => {
     try {
@@ -326,8 +331,8 @@ export default function NewRegistrationPage() {
       const statsResponse = await PaymentService.getAgentRegistrationStats()
       if (statsResponse.data?.data && statsResponse.data?.data?.registrationStats) {
         // The API return format might be different from our local interface
-        const {registrationStats} = statsResponse.data.data
-      
+        const { registrationStats } = statsResponse.data.data
+
         setAgentRegistrationStats(registrationStats)
 
         // If user is an agent, set wallet as default payment method if they have sufficient balance
@@ -338,7 +343,7 @@ export default function NewRegistrationPage() {
       }
     } catch (error: any) {
       console.error("Error loading agent wallet data:", error)
-      
+
       // Handle 401 errors in wallet loading
       if (error?.status === 401) {
         toast.error('Your session has expired. Please log in again.');
@@ -355,14 +360,14 @@ export default function NewRegistrationPage() {
 
   const selectedCondition = deviceConditions.find(c => c.value === formData.deviceCondition)
   return (
-      <>
-        <div>
-          <h1 className="text-lg md:text-3xl font-bold">Register New Device</h1>
-          <p className="text-xs md:text-base text-muted-foreground">Add a new device to your FonSave list</p>
-        </div>
+    <>
+      <div>
+        <h1 className="text-lg md:text-3xl font-bold">Register New Device</h1>
+        <p className="text-xs md:text-base text-muted-foreground">Add a new device to your FonSave list</p>
+      </div>
 
       <form id="device-registration-form" onSubmit={handleSubmit} className="space-y-6 pb-24">
-        
+
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Device Information */}
           <div className="lg:col-span-2 space-y-6">
@@ -379,7 +384,7 @@ export default function NewRegistrationPage() {
               <CardContent className="space-y-4">
                 {/* Device's Owner Name Field */}
                 <div className="space-y-2">
-                    <Label htmlFor="deviceName">Device's Owner Name</Label>
+                  <Label htmlFor="deviceName">Device's Owner Name</Label>
                   <Input
                     id="deviceName"
                     placeholder="e.g., My Samsung S23, Work iPhone, etc."
@@ -388,91 +393,91 @@ export default function NewRegistrationPage() {
                   />
                 </div>
 
-              {isAgent() && (
-              <>
-                <div className="space-y-4 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Registration Type</Label>
-                    <RadioGroup
-                      value={formData.isOwnerSelfRegistration ? 'self' : 'other'}
-                      onValueChange={(value) => {
-                        const isSelf = value === 'self';
-                        setFormData(prev => ({ 
-                          ...prev, 
-                          isOwnerSelfRegistration: isSelf,
-                          ownerEmail: isSelf ? '' : prev.ownerEmail,
-                          ownerPhone: isSelf ? '' : prev.ownerPhone
-                        }));
-                      }}
-                      className="flex flex-col space-y-2"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="other" id="register-other" />
-                        <Label htmlFor="register-other" className="text-sm">Register device for someone else</Label>
+                {isAgent() && (
+                  <>
+                    <div className="space-y-4 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium">Registration Type</Label>
+                        <RadioGroup
+                          value={formData.isOwnerSelfRegistration ? 'self' : 'other'}
+                          onValueChange={(value) => {
+                            const isSelf = value === 'self';
+                            setFormData(prev => ({
+                              ...prev,
+                              isOwnerSelfRegistration: isSelf,
+                              ownerEmail: isSelf ? '' : prev.ownerEmail,
+                              ownerPhone: isSelf ? '' : prev.ownerPhone
+                            }));
+                          }}
+                          className="flex flex-col space-y-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="other" id="register-other" />
+                            <Label htmlFor="register-other" className="text-sm">Register device for someone else</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="self" id="register-self" />
+                            <Label htmlFor="register-self" className="text-sm">Register device for myself</Label>
+                          </div>
+                        </RadioGroup>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="self" id="register-self" />
-                        <Label htmlFor="register-self" className="text-sm">Register device for myself</Label>
+                      <p className="text-xs text-muted-foreground">
+                        {formData.isOwnerSelfRegistration
+                          ? "You're registering this device for yourself. Owner contact details are not required."
+                          : "You're registering this device for someone else. Owner contact details are required."
+                        }
+                      </p>
+                    </div>
+
+                    {/* Owner Contact Details - Only show when registering for others */}
+                    {!formData.isOwnerSelfRegistration && (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="ownerEmail">Device Owner Email</Label>
+                          <Input
+                            ref={(el) => { fieldRefs.current['ownerEmail'] = el }}
+                            id="ownerEmail"
+                            type="email"
+                            placeholder="e.g., owner@email.com"
+                            value={formData.ownerEmail || ""}
+                            onChange={e => handleInputChange('ownerEmail', e.target.value)}
+                            required
+                            className={errors.ownerEmail ? "border-red-500" : ""}
+                          />
+                          {errors.ownerEmail && (
+                            <p className="text-sm text-red-600 flex items-center gap-1">
+                              <IconAlertCircle className="h-4 w-4" />
+                              {errors.ownerEmail}
+                            </p>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="ownerPhone">Device Owner Phone</Label>
+                          <Input
+                            ref={(el) => { fieldRefs.current['ownerPhone'] = el }}
+                            id="ownerPhone"
+                            type="tel"
+                            placeholder="e.g., +2348012345678"
+                            value={formData.ownerPhone || ""}
+                            onChange={e => handleInputChange('ownerPhone', e.target.value)}
+                            className={errors.ownerPhone ? "border-red-500" : ""}
+                          />
+                          {errors.ownerPhone && (
+                            <p className="text-sm text-red-600 flex items-center gap-1">
+                              <IconAlertCircle className="h-4 w-4" />
+                              {errors.ownerPhone}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </RadioGroup>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {formData.isOwnerSelfRegistration
-                      ? "You're registering this device for yourself. Owner contact details are not required."
-                      : "You're registering this device for someone else. Owner contact details are required."
-                    }
-                  </p>
-                </div>
-                
-                {/* Owner Contact Details - Only show when registering for others */}
-                {!formData.isOwnerSelfRegistration && (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="ownerEmail">Device Owner Email</Label>
-                    <Input
-                      ref={(el) => { fieldRefs.current['ownerEmail'] = el }}
-                      id="ownerEmail"
-                      type="email"
-                      placeholder="e.g., owner@email.com"
-                      value={formData.ownerEmail || ""}
-                      onChange={e => handleInputChange('ownerEmail', e.target.value)}
-                      required
-                      className={errors.ownerEmail ? "border-red-500" : ""}
-                    />
-                    {errors.ownerEmail && (
-                      <p className="text-sm text-red-600 flex items-center gap-1">
-                        <IconAlertCircle className="h-4 w-4" />
-                        {errors.ownerEmail}
-                      </p>
                     )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="ownerPhone">Device Owner Phone</Label>
-                    <Input
-                      ref={(el) => { fieldRefs.current['ownerPhone'] = el }}
-                      id="ownerPhone"
-                      type="tel"
-                      placeholder="e.g., +2348012345678"
-                      value={formData.ownerPhone || ""}
-                      onChange={e => handleInputChange('ownerPhone', e.target.value)}
-                      className={errors.ownerPhone ? "border-red-500" : ""}
-                    />
-                    {errors.ownerPhone && (
-                      <p className="text-sm text-red-600 flex items-center gap-1">
-                        <IconAlertCircle className="h-4 w-4" />
-                        {errors.ownerPhone}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                  </>
                 )}
-              </>
-              )}
 
                 {/* IMEI Fields */}
                 <div className="space-y-2">
                   <Label>IMEI Numbers</Label>
-                  
+
                   {/* IMEI 1 - Primary (Required) */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
@@ -485,10 +490,10 @@ export default function NewRegistrationPage() {
                           maxLength={15}
                           className={errors.imei1 ? "border-red-500" : ""}
                         />
-                       
+
                       </div>
                     </div>
-                    
+
                     {/* Error message for IMEI 1 */}
                     {errors.imei1 && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
@@ -496,7 +501,7 @@ export default function NewRegistrationPage() {
                         {errors.imei1}
                       </p>
                     )}
-              
+
                     {imeiValidations[0] === false && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
                         <IconAlertCircle className="h-4 w-4" />
@@ -504,7 +509,7 @@ export default function NewRegistrationPage() {
                       </p>
                     )}
                   </div>
-                  
+
                   {/* IMEI 2 - Secondary (Optional) */}
                   <div className="space-y-2 mt-4">
                     <Label>Secondary IMEI (optional)</Label>
@@ -518,10 +523,10 @@ export default function NewRegistrationPage() {
                           maxLength={15}
                           className={errors.imei2 ? "border-red-500" : ""}
                         />
-                        
+
                       </div>
                     </div>
-                    
+
                     {/* Error message for IMEI 2 */}
                     {errors.imei2 && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
@@ -529,7 +534,7 @@ export default function NewRegistrationPage() {
                         {errors.imei2}
                       </p>
                     )}
-              
+
                     {imeiValidations[1] === false && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
                         <IconAlertCircle className="h-4 w-4" />
@@ -541,7 +546,7 @@ export default function NewRegistrationPage() {
 
                 {/* Device Serial */}
                 <div className="space-y-2">
-                <Label htmlFor="deviceSerial">Device Serial Number (optional)</Label>
+                  <Label htmlFor="deviceSerial">Device Serial Number (optional)</Label>
                   <Input
                     id="deviceSerial"
                     placeholder="e.g., SN123456789"
@@ -558,11 +563,11 @@ export default function NewRegistrationPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="brand">Brand</Label>
-                    <Select 
-                      value={formData.deviceBrand || ""} 
+                    <Select
+                      value={formData.deviceBrand || ""}
                       onValueChange={(value) => handleInputChange('deviceBrand', value)}
                     >
-                      <SelectTrigger 
+                      <SelectTrigger
                         ref={(el) => { fieldRefs.current['deviceBrand'] = el }}
                         className={`w-full${errors.deviceBrand ? " border-red-500" : ""}`}
                       >
@@ -600,23 +605,23 @@ export default function NewRegistrationPage() {
 
                 {/* Operating System and Version */}
                 <div className="space-y-2">
-                    <Label htmlFor="operatingSystem">Operating System (optional)</Label>
-                    <Select 
-                      value={formData.deviceOs || ""} 
-                      onValueChange={(value) => handleInputChange('deviceOs', value)}
-                    >
-                       <SelectTrigger className={`w-full`}>
-                        <SelectValue placeholder="Select OS" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {operatingSystems.map((os) => (
-                          <SelectItem key={os} value={os.toLowerCase()}>
-                            {os}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Label htmlFor="operatingSystem">Operating System (optional)</Label>
+                  <Select
+                    value={formData.deviceOs || ""}
+                    onValueChange={(value) => handleInputChange('deviceOs', value)}
+                  >
+                    <SelectTrigger className={`w-full`}>
+                      <SelectValue placeholder="Select OS" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {operatingSystems.map((os) => (
+                        <SelectItem key={os} value={os.toLowerCase()}>
+                          {os}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
 
                 {/* Device Status */}
@@ -633,14 +638,14 @@ export default function NewRegistrationPage() {
                 {/* Condition */}
                 <div className="space-y-2">
                   <Label htmlFor="condition">Condition</Label>
-                  <Select 
-                    value={formData.deviceCondition || ""} 
+                  <Select
+                    value={formData.deviceCondition || ""}
                     onValueChange={(value) => handleInputChange('deviceCondition', value)}
                   >
-                     <SelectTrigger 
-                       ref={(el) => { fieldRefs.current['deviceCondition'] = el }}
-                       className={`w-full${errors.deviceCondition ? " border-red-500" : ""}`}
-                     >
+                    <SelectTrigger
+                      ref={(el) => { fieldRefs.current['deviceCondition'] = el }}
+                      className={`w-full${errors.deviceCondition ? " border-red-500" : ""}`}
+                    >
                       <SelectValue placeholder="Select condition" />
                     </SelectTrigger>
                     <SelectContent>
@@ -674,7 +679,7 @@ export default function NewRegistrationPage() {
                 </div>
               </CardContent>
             </Card>
-          
+
             {/* Purchase Information */}
             <Card>
               <CardHeader>
@@ -728,8 +733,8 @@ export default function NewRegistrationPage() {
                     rows={3}
                   />
                 </div>
-                
-               
+
+
               </CardContent>
             </Card>
           </div>
@@ -797,13 +802,12 @@ export default function NewRegistrationPage() {
                     <span className="text-muted-foreground">Status:</span>
                     <span>
                       {formData.deviceStatus ? (
-                        <Badge variant="outline" className={`text-xs ${
-                          formData.deviceStatus === 'CLEAN' ? 'bg-green-50 text-green-700 border-green-200' :
-                          formData.deviceStatus === 'STOLEN' ? 'bg-red-50 text-red-700 border-red-200' :
-                          formData.deviceStatus === 'LOST' ? 'bg-orange-50 text-orange-700 border-orange-200' :
-                          formData.deviceStatus === 'BLOCKED' ? 'bg-red-50 text-red-700 border-red-200' :
-                          'bg-gray-50 text-gray-700 border-gray-200'
-                        }`}>
+                        <Badge variant="outline" className={`text-xs ${formData.deviceStatus === 'CLEAN' ? 'bg-green-50 text-green-700 border-green-200' :
+                            formData.deviceStatus === 'STOLEN' ? 'bg-red-50 text-red-700 border-red-200' :
+                              formData.deviceStatus === 'LOST' ? 'bg-orange-50 text-orange-700 border-orange-200' :
+                                formData.deviceStatus === 'BLOCKED' ? 'bg-red-50 text-red-700 border-red-200' :
+                                  'bg-gray-50 text-gray-700 border-gray-200'
+                          }`}>
                           {deviceStatuses.find(s => s.value === formData.deviceStatus)?.label || formData.deviceStatus}
                         </Badge>
                       ) : (
@@ -825,174 +829,174 @@ export default function NewRegistrationPage() {
             </Card>
 
             {/* Payment Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Payment & Renewal Details
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Secure your device registration and stay protected.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Registration Fee */}
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-muted-foreground">Registration Fee:</span>
-              <span className="text-lg font-bold text-primary">
-                {isAgent() ? `${getCurrencySymbol(DEFAULT_CURRENCY)+''+PRICE_AGENT_REGISTRATION_NGN}` : `${getCurrencySymbol(DEFAULT_CURRENCY)+''+PRICE_USER_REGISTRATION_NGN}`} <span className="text-xs text-muted-foreground">/year</span>
-              </span>
-            </div>
-            
-            {/* Renewal Date */}
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-muted-foreground">Renewal Date:</span>
-              <span className="text-sm font-semibold text-green-700 bg-green-50 px-2 py-1 rounded">
-                {new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
-              </span>
-            </div>
-            
-            {/* Payment Methods - Only for Agents */}
-            {isAgent() && (
-              <>
-                <Separator />
-                <div>
-                  <CardTitle className="mb-4">
-                  Select Payment Method
-                  </CardTitle>
-                  <RadioGroup 
-                    value={paymentMethod} 
-                    onValueChange={(value) => {
-                      const newPaymentMethod = value as 'paystack' | 'wallet' | 'free'
-                      setPaymentMethod(newPaymentMethod)
-                      // Update payFromBalance based on selected payment method
-                      if (isAgent()) {
-                        setFormData(prev => ({
-                          ...prev,
-                          payFromBalance: newPaymentMethod === 'wallet'
-                        }))
-                      }
-                    }}
-                    className="space-y-2"
-                  >
-                  
-                    {/* Wallet Option - Always show but disable if insufficient balance */}
-                    <Label htmlFor="wallet"
-                       className={cn(
-                                            "flex flex-col items-start transition-all border rounded-lg p-3", 
-                                            agentRegistrationStats.balance >= (constants?.PRICE_AGENT_REGISTRATION_NGN || 0) 
-                                              ? "cursor-pointer" 
-                                              : "cursor-not-allowed opacity-50",
-                                            paymentMethod === 'wallet' ? "border-primary bg-primary/3" : "opacity-60"
-                                          )}
-                                          >
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem 
-                          value="wallet" 
-                          id="wallet" 
-                          disabled={agentRegistrationStats.balance < (constants?.PRICE_AGENT_REGISTRATION_NGN || 0)}
-                        />
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  Payment & Renewal Details
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Secure your device registration and stay protected.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Registration Fee */}
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-muted-foreground">Registration Fee:</span>
+                  <span className="text-lg font-bold text-primary">
+                    {isAgent() ? `${getCurrencySymbol(DEFAULT_CURRENCY) + '' + PRICE_AGENT_REGISTRATION_NGN}` : `${getCurrencySymbol(DEFAULT_CURRENCY) + '' + PRICE_USER_REGISTRATION_NGN}`} <span className="text-xs text-muted-foreground">/year</span>
+                  </span>
+                </div>
+
+                {/* Renewal Date */}
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-muted-foreground">Renewal Date:</span>
+                  <span className="text-sm font-semibold text-green-700 bg-green-50 px-2 py-1 rounded">
+                    {new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </span>
+                </div>
+
+                {/* Payment Methods - Only for Agents */}
+                {isAgent() && (
+                  <>
+                    <Separator />
+                    <div>
+                      <CardTitle className="mb-4">
+                        Select Payment Method
+                      </CardTitle>
+                      <RadioGroup
+                        value={paymentMethod}
+                        onValueChange={(value) => {
+                          const newPaymentMethod = value as 'paystack' | 'wallet' | 'free'
+                          setPaymentMethod(newPaymentMethod)
+                          // Update payFromBalance based on selected payment method
+                          if (isAgent()) {
+                            setFormData(prev => ({
+                              ...prev,
+                              payFromBalance: newPaymentMethod === 'wallet'
+                            }))
+                          }
+                        }}
+                        className="space-y-2"
+                      >
+
+                        {/* Wallet Option - Always show but disable if insufficient balance */}
+                        <Label htmlFor="wallet"
+                          className={cn(
+                            "flex flex-col items-start transition-all border rounded-lg p-3",
+                            agentRegistrationStats.balance >= (constants?.PRICE_AGENT_REGISTRATION_NGN || 0)
+                              ? "cursor-pointer"
+                              : "cursor-not-allowed opacity-50",
+                            paymentMethod === 'wallet' ? "border-primary bg-primary/3" : "opacity-60"
+                          )}
+                        >
+                          <div className="flex items-start space-x-2">
+                            <RadioGroupItem
+                              value="wallet"
+                              id="wallet"
+                              disabled={agentRegistrationStats.balance < (constants?.PRICE_AGENT_REGISTRATION_NGN || 0)}
+                            />
                             <div className="flex items-center justify-start gap-2">
                               <IconWallet className="h-4 w-4 text-blue-600" />
-                            <span className="font-semibold">Pay from Wallet</span>
-                             <span className="text-xs text-muted-foreground">
-                            (Balance: {getCurrencySymbol(DEFAULT_CURRENCY)+''+agentRegistrationStats.balance.toLocaleString()})
-                          </span>
+                              <span className="font-semibold">Pay from Wallet</span>
+                              <span className="text-xs text-muted-foreground">
+                                (Balance: {getCurrencySymbol(DEFAULT_CURRENCY) + '' + agentRegistrationStats.balance.toLocaleString()})
+                              </span>
+                            </div>
                           </div>
-                      </div>
-                      {agentRegistrationStats.balance < (constants?.PRICE_AGENT_REGISTRATION_NGN || 0) && (
-                        <div className="mt-2 text-xs text-muted-foreground">
-                          Insufficient balance. 
-                          <Link 
-                            to="/billing" 
-                            className="text-primary hover:underline ml-1"
-                          >
-                            Top up your wallet
-                          </Link>
-                        </div>
-                      )}
-                      </Label>
-                    
-                      {/* Free Registration Option - Only show if eligible */}
-                       <Label htmlFor="free"
-                       className={cn(
-                                            "flex flex-col  items-start  cursor-pointer transition-all border rounded-lg p-3", 
-                                              paymentMethod === 'free' ? "border-primary bg-primary/3" : "",
-                                              agentRegistrationStats.hasFreeRegistrations ? "" : "opacity-60"
-                                          )}
-                                          >
-                                              <div className="flex flex-col gap-3 items-start">
+                          {agentRegistrationStats.balance < (constants?.PRICE_AGENT_REGISTRATION_NGN || 0) && (
+                            <div className="mt-2 text-xs text-muted-foreground">
+                              Insufficient balance.
+                              <Link
+                                to="/billing"
+                                className="text-primary hover:underline ml-1"
+                              >
+                                Top up your wallet
+                              </Link>
+                            </div>
+                          )}
+                        </Label>
 
-                                                 <div className="flex gap-3 items-start">
-                      <RadioGroupItem
-                        value="free"
-                        id="free"
-                        className="mt-1"
-                        disabled={!agentRegistrationStats.hasFreeRegistrations}
-                      />
-                     
-                        <div className="flex items-center gap-2">
-                          <IconGift className="h-4 w-4 text-green-600" />
-                          <span className="font-semibold">Free Registration</span>
-                            <Badge className={agentRegistrationStats.hasFreeRegistrations 
-                              ? "bg-green-100 text-xs text-green-700 hover:bg-green-100"
-                               : "bg-muted text-muted-foreground"}>
-                            {agentRegistrationStats.hasFreeRegistrations ? agentRegistrationStats.freeRegistrationsEarned : "Not available"}
-                          </Badge>
-                        </div>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {agentRegistrationStats.hasFreeRegistrations
-                            ? `You've earned a free device registration after 5 paid registrations`
-                            : `You need ${agentRegistrationStats.agent_free_registration_threshold - agentRegistrationStats.nextFreeRegistrationThreshold} more paid registrations to unlock a free registration`}
-                        </span>
-                        </div>
-                      </Label>
-             
-                    
-                  </RadioGroup>
+                        {/* Free Registration Option - Only show if eligible */}
+                        <Label htmlFor="free"
+                          className={cn(
+                            "flex flex-col  items-start  cursor-pointer transition-all border rounded-lg p-3",
+                            paymentMethod === 'free' ? "border-primary bg-primary/3" : "",
+                            agentRegistrationStats.hasFreeRegistrations ? "" : "opacity-60"
+                          )}
+                        >
+                          <div className="flex flex-col gap-3 items-start">
+
+                            <div className="flex gap-3 items-start">
+                              <RadioGroupItem
+                                value="free"
+                                id="free"
+                                className="mt-1"
+                                disabled={!agentRegistrationStats.hasFreeRegistrations}
+                              />
+
+                              <div className="flex items-center gap-2">
+                                <IconGift className="h-4 w-4 text-green-600" />
+                                <span className="font-semibold">Free Registration</span>
+                                <Badge className={agentRegistrationStats.hasFreeRegistrations
+                                  ? "bg-green-100 text-xs text-green-700 hover:bg-green-100"
+                                  : "bg-muted text-muted-foreground"}>
+                                  {agentRegistrationStats.hasFreeRegistrations ? agentRegistrationStats.freeRegistrationsEarned : "Not available"}
+                                </Badge>
+                              </div>
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                              {agentRegistrationStats.hasFreeRegistrations
+                                ? `You've earned a free device registration after 5 paid registrations`
+                                : `You need ${agentRegistrationStats.agent_free_registration_threshold - agentRegistrationStats.nextFreeRegistrationThreshold} more paid registrations to unlock a free registration`}
+                            </span>
+                          </div>
+                        </Label>
+
+
+                      </RadioGroup>
+                    </div>
+                  </>
+                )}
+
+                <Separator />
+
+                <div className="text-xs text-muted-foreground">
+                  <p>
+                    This annual fee covers 12 months of device protection. Your device will be registered on the FonSave platform and you'll receive alerts if your device is reported stolen or missing.
+                  </p>
+                  <p className="mt-2">
+                    {(!isAgent() || paymentMethod === 'paystack') ?
+                      "After submitting the form, you'll be redirected to Paystack to complete your payment securely." :
+                      paymentMethod === 'wallet' ?
+                        "The registration fee will be deducted from your wallet balance." :
+                        "You'll use one of your free registrations for this device."
+                    }
+                  </p>
                 </div>
-              </>
-            )}
-            
-            <Separator />
-            
-            <div className="text-xs text-muted-foreground">
-              <p>
-                This annual fee covers 12 months of device protection. Your device will be registered on the FonSave platform and you'll receive alerts if your device is reported stolen or missing.
-              </p>
-              <p className="mt-2">
-                {(!isAgent() || paymentMethod === 'paystack') ? 
-                  "After submitting the form, you'll be redirected to Paystack to complete your payment securely." :
-                  paymentMethod === 'wallet' ? 
-                    "The registration fee will be deducted from your wallet balance." :
-                    "You'll use one of your free registrations for this device."
-                }
-              </p>
-            </div>
 
-            {/* Payment Platform - Only show for Paystack */}
-            {(!isAgent() || paymentMethod === 'paystack') && (
-              <div className="flex items-center gap-2">
-                <img
-                  src="https://cdn.brandfetch.io/idM5mrwtDs/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667559828449"
-                  alt="Paystack"
-                  className="h-4"
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                {/* Payment Platform - Only show for Paystack */}
+                {(!isAgent() || paymentMethod === 'paystack') && (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="https://cdn.brandfetch.io/idM5mrwtDs/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667559828449"
+                      alt="Paystack"
+                      className="h-4"
+                    />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-      
+
 
         {/* Fixed buttons at bottom */}
         <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-lg z-50 p-4">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               className="hidden sm:inline-flex"
               onClick={handleReset}
               disabled={isSubmitting}
@@ -1000,9 +1004,9 @@ export default function NewRegistrationPage() {
               Reset Form
             </Button>
             <div className="flex gap-2">
-              <Button 
-                type="button" 
-                variant="ghost" 
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                   navigate(-1);
@@ -1011,17 +1015,17 @@ export default function NewRegistrationPage() {
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 type="submit"
                 disabled={isSubmitting}
                 className="gap-2"
               >
-                {isSubmitting ? "Submitting..." : 
-                  isAgent() ? 
+                {isSubmitting ? "Submitting..." :
+                  isAgent() ?
                     paymentMethod === 'free' ? "Register Device (Free)" :
-                    paymentMethod === 'wallet' ? "Register & Pay from Wallet" : 
-                    `Register & Pay ${getCurrencySymbol(DEFAULT_CURRENCY)+''+PRICE_AGENT_REGISTRATION_NGN}` :
-                    `Register & Pay ${getCurrencySymbol(DEFAULT_CURRENCY)+''+PRICE_USER_REGISTRATION_NGN}`
+                      paymentMethod === 'wallet' ? "Register & Pay from Wallet" :
+                        `Register & Pay ${getCurrencySymbol(DEFAULT_CURRENCY) + '' + PRICE_AGENT_REGISTRATION_NGN}` :
+                    `Register & Pay ${getCurrencySymbol(DEFAULT_CURRENCY) + '' + PRICE_USER_REGISTRATION_NGN}`
                 }
               </Button>
             </div>
