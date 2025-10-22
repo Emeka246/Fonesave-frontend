@@ -268,9 +268,9 @@ export default function NewRegistrationPage() {
             toast.success(
               deviceRegistration.isFreeRegistration
                 ? 'Device registered successfully using a free registration!'
-                : 'Registration email sent to the user! (Check spam folder) Payment will be processed from your wallet.',
+                : 'We have sent You Email To Complete The Registration! (Check The Spam Folder)',
               {
-                duration: 10000, // show for 10 seconds
+                duration: 10000, // show for 15 seconds
               }
             );
 
