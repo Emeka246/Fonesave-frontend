@@ -37,7 +37,7 @@ export default function Homepage() {
                     Register Your Phone Now, In Case of Theft or Loss
                 </h1>
                 <p className="section-subtitle">
-                   Protect your phone, avoid buying stolen phones, earn money by helping others register their phones as a FonSave Agent.
+                   Protect your phone, avoid buying stolen phones, earn money as a FonSave Agent by helping others register their phones.
                 </p>
               </div>
                 <div className="flex items-center space-x-4 mt-5 md:mt-10">
