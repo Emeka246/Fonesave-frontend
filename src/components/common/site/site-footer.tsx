@@ -21,7 +21,7 @@ export const SiteFooter = () => {
                                 device verification?
                             </h2> 
                         <p className="text-zinc-300 text-sm text-balance">
-                            Thousands of businesses already using FonSave for device verification
+                            Trusted by phone users and agents across the World for secure device verification.
                         </p>
                         </div>
                         

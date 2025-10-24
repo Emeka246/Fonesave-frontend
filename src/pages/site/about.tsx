@@ -295,7 +295,7 @@ export default function About() {
                 Protect Your Phone Now
               </Button>
               <p className="text-sm text-muted-foreground">
-                FonSave.com – Protect Your Phone. Stop Theft Before It Happens.
+                FonSave.com – Register Your Phone Now — In Case of Theft or Loss.
               </p>
             </div>
           </div>

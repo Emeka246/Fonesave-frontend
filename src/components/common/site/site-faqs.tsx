@@ -12,7 +12,7 @@ const faqData = [
   {
     id: "faq-1",
     question: "What is Fonsave?",
-    answer: "Fonsave is a secure platform where you can register your phone's IMEI number to protect it from theft and allow buyers to verify whether a device is safe, stolen, or missing."
+    answer: "FonSave is a digital platform that helps you protect your phone. You can to mark your phone as stolen or safe, making it easier to recover your device or prevent others from buying stolen phones. FonSave also gives agents the opportunity to earn money by helping others register their phones."
   },
   {
     id: "faq-2",
@@ -47,7 +47,7 @@ const faqData = [
   {
     id: "faq-8",
     question: "How do I transfer ownership of my phone to someone else?",
-    answer: "You can use the Transfer Ownership option in your dashboard. Click \"View Details\" of the device you want to transfer ownership. This will remove the device from your account so the new owner can register it under their own account."
+    answer: "You can use the Transfer Ownership option in your dashboard. Click \"View Details\" of the device you want to transfer ownership. Then click -Transfer Ownership- button. This will remove the device from your account so the new owner can register it under their own account."
   },
   {
     id: "faq-9",

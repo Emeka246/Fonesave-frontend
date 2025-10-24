@@ -76,7 +76,7 @@ export default function DeviceByIdInput() {
     <>
       <Card className="rounded-2xl shadow-lg p-4 md:p-8 gap-4 md:gap-6">
         <CardHeader className="px-4 md:px-6">
-          <CardTitle>Check Phone Status</CardTitle>
+          <CardTitle>Check Phone Status (Free)</CardTitle>
           <CardDescription>Enter your 15-Digits IMEI for instant verification</CardDescription>
         </CardHeader>
         <CardContent className="px-4 md:px-6">

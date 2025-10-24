@@ -28,16 +28,16 @@ export default function Homepage() {
                         Rated 5.0
                         </h3>
                         <p className="text-xs text-zinc-500">
-                            Over 10,000+ verified devices
+                            Over 500,000+ verified devices
                         </p>
                     </div>
               </div>
               <div className="">
                 <h1 className="page-title">
-                    Protect Your Phone. Stop Theft Before It Happens
+                    Register Your Phone Now, In Case of Theft or Loss
                 </h1>
                 <p className="section-subtitle">
-                   Register your IMEI, protect your phone, and verify devices instantly. Stay safe from theft and avoid buying stolen phones.
+                   Protect your phone, avoid buying stolen phones, earn money by helping others register their phones as a FonSave Agent.
                 </p>
               </div>
                 <div className="flex items-center space-x-4 mt-5 md:mt-10">
@@ -145,7 +145,7 @@ export default function Homepage() {
              <div className="col-span-2 md:col-span-1">
                   <div className="panel-accent px-10 md:px-20  justify-start h-full md:min-h-[300px]">
                     <div className="text-4xl md:text-7xl font-black mb-6 md:mb-12">
-                      10K+
+                      500K+
                     </div>
                     <p className="text-lg md:text-2xl">
                       Every action (registered, marked stolen, recovered, transferred) is logged with timestamps
@@ -155,7 +155,7 @@ export default function Homepage() {
                 <div className="col-span-2 md:col-span-1">
                 <div className="panel-accent px-10 md:px-20  flex flex-col justify-start h-full md:min-h-[300px]">
                     <p className="text-lg md:text-2xl mb-6 md:mb-12">
-                    Effortless IMEI ownership transfer for buyers and sellers.
+                    Effortless phone ownership transfer for buyers and sellers.
                     </p>
                   <IconUserOwnerShipTransfer className="w-[80%] mx-auto" />
                 </div>
