@@ -1,20 +1,33 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import DeviceService from "@/services/device.service"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Checkbox } from "@/components/ui/checkbox"
-import { 
-  IconShield, 
-  IconAlertTriangle, 
-  IconPhone, 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DeviceService from "@/services/device.service";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  IconShield,
+  IconAlertTriangle,
+  IconPhone,
   IconCalendar,
   IconUser,
   IconFileText,
@@ -22,35 +35,35 @@ import {
   IconExclamationCircle,
   IconCheck,
   IconLoader2,
-  IconAlertCircle
-} from "@tabler/icons-react"
+  IconAlertCircle,
+} from "@tabler/icons-react";
 
 interface TheftReportData {
-  imei: string
-  deviceBrand: string
-  deviceModel: string
-  deviceColor: string
-  deviceStatus: string
-  incidentDate: string
-  incidentTime: string
-  location: string
-  circumstances: string
-  policeReportNumber: string
-  reportingOfficer: string
-  policeStation: string
-  reporterName: string
-  reporterPhone: string
-  reporterEmail: string
-  reporterAddress: string
-  witnessName: string
-  witnessPhone: string
-  additionalInfo: string
-  insuranceClaim: boolean
-  insuranceCompany: string
-  insurancePolicyNumber: string
-  notifyCarrier: boolean
-  urgentFlag: boolean
-  ownerMessage: string
+  imei: string;
+  deviceBrand: string;
+  deviceModel: string;
+  deviceColor: string;
+  deviceStatus: string;
+  incidentDate: string;
+  incidentTime: string;
+  location: string;
+  circumstances: string;
+  policeReportNumber: string;
+  reportingOfficer: string;
+  policeStation: string;
+  reporterName: string;
+  reporterPhone: string;
+  reporterEmail: string;
+  reporterAddress: string;
+  witnessName: string;
+  witnessPhone: string;
+  additionalInfo: string;
+  insuranceClaim: boolean;
+  insuranceCompany: string;
+  insurancePolicyNumber: string;
+  notifyCarrier: boolean;
+  urgentFlag: boolean;
+  ownerMessage: string;
 }
 
 const initialReportData: TheftReportData = {
@@ -78,8 +91,8 @@ const initialReportData: TheftReportData = {
   insurancePolicyNumber: "",
   notifyCarrier: true,
   urgentFlag: false,
-  ownerMessage: ""
-}
+  ownerMessage: "",
+};
 
 const circumstanceOptions = [
   "Pickpocketing",
@@ -90,38 +103,44 @@ const circumstanceOptions = [
   "Stolen from workplace",
   "Stolen from home",
   "Mugging/Street theft",
-  "Other"
-]
+  "Other",
+];
 
 export default function ReportTheftPage() {
-  const navigate = useNavigate()
-  const [reportData, setReportData] = useState<TheftReportData>(initialReportData)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [errors, setErrors] = useState<Partial<TheftReportData> & { general?: string }>({})
-  const [isImeiVerified, setIsImeiVerified] = useState<boolean | null>(null)
-  const [existingDevice, setExistingDevice] = useState<any>(null)
+  const navigate = useNavigate();
+  const [reportData, setReportData] =
+    useState<TheftReportData>(initialReportData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<
+    Partial<TheftReportData> & { general?: string }
+  >({});
+  const [isImeiVerified, setIsImeiVerified] = useState<boolean | null>(null);
+  const [existingDevice, setExistingDevice] = useState<any>(null);
 
-  const handleInputChange = (field: keyof TheftReportData, value: string | boolean) => {
-    setReportData(prev => ({ ...prev, [field]: value }))
+  const handleInputChange = (
+    field: keyof TheftReportData,
+    value: string | boolean
+  ) => {
+    setReportData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: "" }))
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
-  }
+  };
 
   const verifyImei = async () => {
     if (!reportData.imei || reportData.imei.length !== 15) {
-      setIsImeiVerified(false)
-      return
+      setIsImeiVerified(false);
+      return;
     }
 
     // Simulate IMEI verification against registered devices
-    setIsImeiVerified(null)
-    
+    setIsImeiVerified(null);
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Mock device data (in real app, this would come from API)
       const mockDevice = {
         imei: reportData.imei,
@@ -129,144 +148,156 @@ export default function ReportTheftPage() {
         model: "iPhone 15 Pro",
         color: "Space Black",
         currentStatus: "Clean",
-        owner: "John Doe"
-      }
-      
-      setExistingDevice(mockDevice)
-      setIsImeiVerified(true)
-      
+        owner: "John Doe",
+      };
+
+      setExistingDevice(mockDevice);
+      setIsImeiVerified(true);
+
       // Pre-fill device details if found
-      setReportData(prev => ({
+      setReportData((prev) => ({
         ...prev,
         deviceBrand: mockDevice.brand,
         deviceModel: mockDevice.model,
-        deviceColor: mockDevice.color
-      }))
-      
+        deviceColor: mockDevice.color,
+      }));
     } catch (error) {
-      setIsImeiVerified(false)
-      setExistingDevice(null)
+      setIsImeiVerified(false);
+      setExistingDevice(null);
     }
-  }
+  };
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<TheftReportData> = {}
+    const newErrors: Partial<TheftReportData> = {};
 
     // Required fields validation
     if (!reportData.imei.trim()) {
-      newErrors.imei = "IMEI is required"
+      newErrors.imei = "IMEI is required";
     } else if (!/^\d{15}$/.test(reportData.imei)) {
-      newErrors.imei = "IMEI must be exactly 15 digits"
+      newErrors.imei = "IMEI must be exactly 15 digits";
     }
 
     if (!reportData.incidentDate) {
-      newErrors.incidentDate = "Incident date is required"
+      newErrors.incidentDate = "Incident date is required";
     }
 
     if (!reportData.location.trim()) {
-      newErrors.location = "Location is required"
+      newErrors.location = "Location is required";
     }
 
     if (!reportData.circumstances.trim()) {
-      newErrors.circumstances = "Circumstances are required"
+      newErrors.circumstances = "Circumstances are required";
     }
 
     if (!reportData.reporterName.trim()) {
-      newErrors.reporterName = "Reporter name is required"
+      newErrors.reporterName = "Reporter name is required";
     }
 
     if (!reportData.reporterPhone.trim()) {
-      newErrors.reporterPhone = "Reporter phone is required"
+      newErrors.reporterPhone = "Reporter phone is required";
     }
 
     if (!reportData.reporterEmail.trim()) {
-      newErrors.reporterEmail = "Reporter email is required"
+      newErrors.reporterEmail = "Reporter email is required";
     }
 
     if (!reportData.deviceStatus.trim()) {
-      newErrors.deviceStatus = "Device status is required"
+      newErrors.deviceStatus = "Device status is required";
     }
 
     if (!reportData.ownerMessage.trim()) {
-      newErrors.ownerMessage = "Message for finder is required"
+      newErrors.ownerMessage = "Message for finder is required";
     }
 
     // Conditional validation
     if (reportData.insuranceClaim) {
       if (!reportData.insuranceCompany.trim()) {
-        newErrors.insuranceCompany = "Insurance company is required"
+        newErrors.insuranceCompany = "Insurance company is required";
       }
       if (!reportData.insurancePolicyNumber.trim()) {
-        newErrors.insurancePolicyNumber = "Policy number is required"
+        newErrors.insurancePolicyNumber = "Policy number is required";
       }
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!validateForm()) {
-      return
+      return;
     }
 
     if (!isImeiVerified) {
-      setErrors({ imei: "Please verify the IMEI first" })
-      return
+      setErrors({ imei: "Please verify the IMEI first" });
+      return;
     }
 
-    setIsSubmitting(true)
-    
+    setIsSubmitting(true);
+
     try {
       // Find the device ID from the verified device
       if (!existingDevice?.id) {
-        setErrors({ imei: "Device not found. Please verify the IMEI again." })
-        return
+        setErrors({ imei: "Device not found. Please verify the IMEI again." });
+        return;
       }
 
       // Mark device with selected status and owner message
-      await DeviceService.updateDeviceStatus(existingDevice.id, reportData.deviceStatus as 'STOLEN' | 'LOST', reportData.ownerMessage)
-      
+      await DeviceService.updateDeviceStatus(
+        existingDevice.id,
+        reportData.deviceStatus as "STOLEN" | "LOST",
+        reportData.ownerMessage
+      );
+
       // Navigate to success page or device list
-      const statusText = reportData.deviceStatus === 'STOLEN' ? 'stolen' : 'lost';
-      navigate('/table', { 
-        state: { 
+      const statusText =
+        reportData.deviceStatus === "STOLEN" ? "stolen" : "lost";
+      navigate("/table", {
+        state: {
           message: `Theft report submitted successfully. Device ${reportData.imei} has been marked as ${statusText} with your message.`,
-          type: "success"
-        }
-      })
+          type: "success",
+        },
+      });
     } catch (error: any) {
-      console.error('Error submitting theft report:', error)
-      setErrors({ 
-        general: error?.data?.message || 'Failed to submit theft report. Please try again.' 
-      })
+      console.error("Error submitting theft report:", error);
+      setErrors({
+        general:
+          error?.data?.message ||
+          "Failed to submit theft report. Please try again.",
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleReset = () => {
-    setReportData(initialReportData)
-    setErrors({})
-    setIsImeiVerified(null)
-    setExistingDevice(null)
-  }
+    setReportData(initialReportData);
+    setErrors({});
+    setIsImeiVerified(null);
+    setExistingDevice(null);
+  };
 
   return (
     <>
-        <div>
-          <h1 className="text-3xl font-bold text-red-600">Report Device Theft/Loss</h1>
-          <p className="text-muted-foreground">Report a stolen or lost device and update its status in the system</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-red-600">
+          Report Device Theft/Loss
+        </h1>
+        <p className="text-muted-foreground">
+          Report a stolen or lost device and update its status in the system
+        </p>
+      </div>
 
       {/* Emergency Alert */}
       <Alert className="border-red-200 bg-red-50">
         <IconAlertTriangle className="h-4 w-4 text-red-600" />
         <AlertDescription className="text-red-800">
-          <strong>Important:</strong> If this is an emergency, please contact local authorities immediately. 
-          This form is for updating device records and does not replace filing a police report for stolen devices.
+          <strong>Important:</strong> If this is an emergency, please contact
+          local authorities immediately. This form is for updating device
+          records and does not replace filing a police report for stolen
+          devices.
         </AlertDescription>
       </Alert>
 
@@ -284,7 +315,6 @@ export default function ReportTheftPage() {
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Form Content */}
           <div className="lg:col-span-2 space-y-6">
-            
             {/* Device Identification */}
             <Card>
               <CardHeader>
@@ -304,7 +334,9 @@ export default function ReportTheftPage() {
                       id="imei"
                       placeholder="Enter 15-digit IMEI number"
                       value={reportData.imei}
-                      onChange={(e) => handleInputChange('imei', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("imei", e.target.value)
+                      }
                       maxLength={15}
                       className={errors.imei ? "border-red-500" : ""}
                     />
@@ -319,32 +351,34 @@ export default function ReportTheftPage() {
                       Verify
                     </Button>
                   </div>
-                  
+
                   {errors.imei && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
                       <IconAlertCircle className="h-4 w-4" />
                       {errors.imei}
                     </p>
                   )}
-                  
+
                   {isImeiVerified === true && existingDevice && (
                     <div className="p-3 bg-green-50 border border-green-200 rounded-md">
                       <p className="text-sm text-green-800 flex items-center gap-1">
                         <IconCheck className="h-4 w-4" />
-                        Device found in system: {existingDevice.brand} {existingDevice.model} ({existingDevice.color})
+                        Device found in system: {existingDevice.brand}{" "}
+                        {existingDevice.model} ({existingDevice.color})
                       </p>
                     </div>
                   )}
-                  
+
                   {isImeiVerified === false && (
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                       <p className="text-sm text-yellow-800 flex items-center gap-1">
                         <IconExclamationCircle className="h-4 w-4" />
-                        Device not found in system. You can still proceed with the report.
+                        Device not found in system. You can still proceed with
+                        the report.
                       </p>
                     </div>
                   )}
-                  
+
                   {isImeiVerified === null && reportData.imei.length === 15 && (
                     <p className="text-sm text-blue-600 flex items-center gap-1">
                       <IconLoader2 className="h-4 w-4 animate-spin" />
@@ -361,7 +395,9 @@ export default function ReportTheftPage() {
                       id="deviceBrand"
                       placeholder="e.g., Apple, Samsung"
                       value={reportData.deviceBrand}
-                      onChange={(e) => handleInputChange('deviceBrand', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("deviceBrand", e.target.value)
+                      }
                       disabled={!!existingDevice}
                     />
                   </div>
@@ -371,7 +407,9 @@ export default function ReportTheftPage() {
                       id="deviceModel"
                       placeholder="e.g., iPhone 15 Pro"
                       value={reportData.deviceModel}
-                      onChange={(e) => handleInputChange('deviceModel', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("deviceModel", e.target.value)
+                      }
                       disabled={!!existingDevice}
                     />
                   </div>
@@ -381,7 +419,9 @@ export default function ReportTheftPage() {
                       id="deviceColor"
                       placeholder="e.g., Space Black"
                       value={reportData.deviceColor}
-                      onChange={(e) => handleInputChange('deviceColor', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("deviceColor", e.target.value)
+                      }
                       disabled={!!existingDevice}
                     />
                   </div>
@@ -408,11 +448,15 @@ export default function ReportTheftPage() {
                       id="incidentDate"
                       type="date"
                       value={reportData.incidentDate}
-                      onChange={(e) => handleInputChange('incidentDate', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("incidentDate", e.target.value)
+                      }
                       className={errors.incidentDate ? "border-red-500" : ""}
                     />
                     {errors.incidentDate && (
-                      <p className="text-sm text-red-600">{errors.incidentDate}</p>
+                      <p className="text-sm text-red-600">
+                        {errors.incidentDate}
+                      </p>
                     )}
                   </div>
 
@@ -422,7 +466,9 @@ export default function ReportTheftPage() {
                       id="incidentTime"
                       type="time"
                       value={reportData.incidentTime}
-                      onChange={(e) => handleInputChange('incidentTime', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("incidentTime", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -433,7 +479,9 @@ export default function ReportTheftPage() {
                     id="location"
                     placeholder="Street address, city, or general area"
                     value={reportData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("location", e.target.value)
+                    }
                     className={errors.location ? "border-red-500" : ""}
                   />
                   {errors.location && (
@@ -443,11 +491,15 @@ export default function ReportTheftPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="circumstances">Circumstances *</Label>
-                  <Select 
-                    value={reportData.circumstances} 
-                    onValueChange={(value) => handleInputChange('circumstances', value)}
+                  <Select
+                    value={reportData.circumstances}
+                    onValueChange={(value) =>
+                      handleInputChange("circumstances", value)
+                    }
                   >
-                    <SelectTrigger className={errors.circumstances ? "border-red-500" : ""}>
+                    <SelectTrigger
+                      className={errors.circumstances ? "border-red-500" : ""}
+                    >
                       <SelectValue placeholder="Select circumstances" />
                     </SelectTrigger>
                     <SelectContent>
@@ -459,17 +511,23 @@ export default function ReportTheftPage() {
                     </SelectContent>
                   </Select>
                   {errors.circumstances && (
-                    <p className="text-sm text-red-600">{errors.circumstances}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.circumstances}
+                    </p>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="deviceStatus">Device Status *</Label>
-                  <Select 
-                    value={reportData.deviceStatus} 
-                    onValueChange={(value) => handleInputChange('deviceStatus', value)}
+                  <Select
+                    value={reportData.deviceStatus}
+                    onValueChange={(value) =>
+                      handleInputChange("deviceStatus", value)
+                    }
                   >
-                    <SelectTrigger className={errors.deviceStatus ? "border-red-500" : ""}>
+                    <SelectTrigger
+                      className={errors.deviceStatus ? "border-red-500" : ""}
+                    >
                       <SelectValue placeholder="Select device status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -478,7 +536,9 @@ export default function ReportTheftPage() {
                     </SelectContent>
                   </Select>
                   {errors.deviceStatus && (
-                    <p className="text-sm text-red-600">{errors.deviceStatus}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.deviceStatus}
+                    </p>
                   )}
                 </div>
 
@@ -488,7 +548,9 @@ export default function ReportTheftPage() {
                     id="additionalInfo"
                     placeholder="Describe what happened in detail..."
                     value={reportData.additionalInfo}
-                    onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("additionalInfo", e.target.value)
+                    }
                     rows={3}
                   />
                 </div>
@@ -497,17 +559,33 @@ export default function ReportTheftPage() {
                   <Label htmlFor="ownerMessage">Message for Finder *</Label>
                   <Textarea
                     id="ownerMessage"
-                    placeholder="Leave a message for whoever finds your phone (e.g., 'Please return my phone and get 10,000 naira reward', 'Contact me at +234...', etc.)"
+                    placeholder="Briefly describe how your phone was lost (max 120 characters)"
                     value={reportData.ownerMessage}
-                    onChange={(e) => handleInputChange('ownerMessage', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "ownerMessage",
+                        e.target.value.slice(0, 120)
+                      )
+                    }
                     rows={3}
+                    maxLength={120}
                     className={errors.ownerMessage ? "border-red-500" : ""}
                   />
+
+                  {/* Character Counter */}
+                  <p className="text-xs text-gray-500 text-right">
+                    {reportData.ownerMessage.length}/120 characters
+                  </p>
+
                   {errors.ownerMessage && (
-                    <p className="text-sm text-red-600">{errors.ownerMessage}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.ownerMessage}
+                    </p>
                   )}
+
                   <p className="text-xs text-gray-500">
-                    This message will be displayed to anyone who searches for your device's IMEI number
+                    This message will be displayed to anyone who searches for
+                    your device's IMEI number.
                   </p>
                 </div>
               </CardContent>
@@ -527,12 +605,16 @@ export default function ReportTheftPage() {
               <CardContent className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="policeReportNumber">Police Report Number</Label>
+                    <Label htmlFor="policeReportNumber">
+                      Police Report Number
+                    </Label>
                     <Input
                       id="policeReportNumber"
                       placeholder="Report number or case ID"
                       value={reportData.policeReportNumber}
-                      onChange={(e) => handleInputChange('policeReportNumber', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("policeReportNumber", e.target.value)
+                      }
                     />
                   </div>
 
@@ -542,7 +624,9 @@ export default function ReportTheftPage() {
                       id="policeStation"
                       placeholder="Station name or precinct"
                       value={reportData.policeStation}
-                      onChange={(e) => handleInputChange('policeStation', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("policeStation", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -553,7 +637,9 @@ export default function ReportTheftPage() {
                     id="reportingOfficer"
                     placeholder="Officer name or badge number"
                     value={reportData.reportingOfficer}
-                    onChange={(e) => handleInputChange('reportingOfficer', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("reportingOfficer", e.target.value)
+                    }
                   />
                 </div>
               </CardContent>
@@ -578,11 +664,15 @@ export default function ReportTheftPage() {
                       id="reporterName"
                       placeholder="Your full name"
                       value={reportData.reporterName}
-                      onChange={(e) => handleInputChange('reporterName', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("reporterName", e.target.value)
+                      }
                       className={errors.reporterName ? "border-red-500" : ""}
                     />
                     {errors.reporterName && (
-                      <p className="text-sm text-red-600">{errors.reporterName}</p>
+                      <p className="text-sm text-red-600">
+                        {errors.reporterName}
+                      </p>
                     )}
                   </div>
 
@@ -592,11 +682,15 @@ export default function ReportTheftPage() {
                       id="reporterPhone"
                       placeholder="Contact phone number"
                       value={reportData.reporterPhone}
-                      onChange={(e) => handleInputChange('reporterPhone', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("reporterPhone", e.target.value)
+                      }
                       className={errors.reporterPhone ? "border-red-500" : ""}
                     />
                     {errors.reporterPhone && (
-                      <p className="text-sm text-red-600">{errors.reporterPhone}</p>
+                      <p className="text-sm text-red-600">
+                        {errors.reporterPhone}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -608,11 +702,15 @@ export default function ReportTheftPage() {
                     type="email"
                     placeholder="Your email address"
                     value={reportData.reporterEmail}
-                    onChange={(e) => handleInputChange('reporterEmail', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("reporterEmail", e.target.value)
+                    }
                     className={errors.reporterEmail ? "border-red-500" : ""}
                   />
                   {errors.reporterEmail && (
-                    <p className="text-sm text-red-600">{errors.reporterEmail}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.reporterEmail}
+                    </p>
                   )}
                 </div>
 
@@ -622,7 +720,9 @@ export default function ReportTheftPage() {
                     id="reporterAddress"
                     placeholder="Your full address"
                     value={reportData.reporterAddress}
-                    onChange={(e) => handleInputChange('reporterAddress', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("reporterAddress", e.target.value)
+                    }
                     rows={2}
                   />
                 </div>
@@ -630,7 +730,9 @@ export default function ReportTheftPage() {
                 {/* Witness Information */}
                 <Separator />
                 <div className="space-y-3">
-                  <Label className="text-base font-medium">Witness Information (Optional)</Label>
+                  <Label className="text-base font-medium">
+                    Witness Information (Optional)
+                  </Label>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="witnessName">Witness Name</Label>
@@ -638,7 +740,9 @@ export default function ReportTheftPage() {
                         id="witnessName"
                         placeholder="Witness full name"
                         value={reportData.witnessName}
-                        onChange={(e) => handleInputChange('witnessName', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("witnessName", e.target.value)
+                        }
                       />
                     </div>
                     <div className="space-y-2">
@@ -647,7 +751,9 @@ export default function ReportTheftPage() {
                         id="witnessPhone"
                         placeholder="Witness phone number"
                         value={reportData.witnessPhone}
-                        onChange={(e) => handleInputChange('witnessPhone', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("witnessPhone", e.target.value)
+                        }
                       />
                     </div>
                   </div>
@@ -673,9 +779,14 @@ export default function ReportTheftPage() {
                     <Checkbox
                       id="insuranceClaim"
                       checked={reportData.insuranceClaim}
-                      onCheckedChange={(checked) => handleInputChange('insuranceClaim', checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("insuranceClaim", checked as boolean)
+                      }
                     />
-                    <Label htmlFor="insuranceClaim" className="text-sm font-medium">
+                    <Label
+                      htmlFor="insuranceClaim"
+                      className="text-sm font-medium"
+                    >
                       I plan to file an insurance claim for this device
                     </Label>
                   </div>
@@ -684,29 +795,53 @@ export default function ReportTheftPage() {
                     <div className="ml-6 space-y-4 p-4 bg-gray-50 rounded-md">
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
-                          <Label htmlFor="insuranceCompany">Insurance Company *</Label>
+                          <Label htmlFor="insuranceCompany">
+                            Insurance Company *
+                          </Label>
                           <Input
                             id="insuranceCompany"
                             placeholder="Insurance company name"
                             value={reportData.insuranceCompany}
-                            onChange={(e) => handleInputChange('insuranceCompany', e.target.value)}
-                            className={errors.insuranceCompany ? "border-red-500" : ""}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "insuranceCompany",
+                                e.target.value
+                              )
+                            }
+                            className={
+                              errors.insuranceCompany ? "border-red-500" : ""
+                            }
                           />
                           {errors.insuranceCompany && (
-                            <p className="text-sm text-red-600">{errors.insuranceCompany}</p>
+                            <p className="text-sm text-red-600">
+                              {errors.insuranceCompany}
+                            </p>
                           )}
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="insurancePolicyNumber">Policy Number *</Label>
+                          <Label htmlFor="insurancePolicyNumber">
+                            Policy Number *
+                          </Label>
                           <Input
                             id="insurancePolicyNumber"
                             placeholder="Policy number"
                             value={reportData.insurancePolicyNumber}
-                            onChange={(e) => handleInputChange('insurancePolicyNumber', e.target.value)}
-                            className={errors.insurancePolicyNumber ? "border-red-500" : ""}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "insurancePolicyNumber",
+                                e.target.value
+                              )
+                            }
+                            className={
+                              errors.insurancePolicyNumber
+                                ? "border-red-500"
+                                : ""
+                            }
                           />
                           {errors.insurancePolicyNumber && (
-                            <p className="text-sm text-red-600">{errors.insurancePolicyNumber}</p>
+                            <p className="text-sm text-red-600">
+                              {errors.insurancePolicyNumber}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -722,9 +857,14 @@ export default function ReportTheftPage() {
                     <Checkbox
                       id="notifyCarrier"
                       checked={reportData.notifyCarrier}
-                      onCheckedChange={(checked) => handleInputChange('notifyCarrier', checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("notifyCarrier", checked as boolean)
+                      }
                     />
-                    <Label htmlFor="notifyCarrier" className="text-sm font-medium">
+                    <Label
+                      htmlFor="notifyCarrier"
+                      className="text-sm font-medium"
+                    >
                       Notify mobile carrier to block the device
                     </Label>
                   </div>
@@ -733,7 +873,9 @@ export default function ReportTheftPage() {
                     <Checkbox
                       id="urgentFlag"
                       checked={reportData.urgentFlag}
-                      onCheckedChange={(checked) => handleInputChange('urgentFlag', checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("urgentFlag", checked as boolean)
+                      }
                     />
                     <Label htmlFor="urgentFlag" className="text-sm font-medium">
                       Mark as urgent (high priority processing)
@@ -758,9 +900,11 @@ export default function ReportTheftPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Device:</span>
-                    <span>{reportData.deviceBrand && reportData.deviceModel 
-                      ? `${reportData.deviceBrand} ${reportData.deviceModel}` 
-                      : "—"}</span>
+                    <span>
+                      {reportData.deviceBrand && reportData.deviceModel
+                        ? `${reportData.deviceBrand} ${reportData.deviceModel}`
+                        : "—"}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Color:</span>
@@ -768,44 +912,66 @@ export default function ReportTheftPage() {
                   </div>
                   <Separator />
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Incident Date:</span>
+                    <span className="text-muted-foreground">
+                      Incident Date:
+                    </span>
                     <span>{reportData.incidentDate || "—"}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Location:</span>
-                    <span className="text-right text-xs">{reportData.location || "—"}</span>
+                    <span className="text-right text-xs">
+                      {reportData.location || "—"}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Circumstances:</span>
-                    <span className="text-xs">{reportData.circumstances || "—"}</span>
+                    <span className="text-muted-foreground">
+                      Circumstances:
+                    </span>
+                    <span className="text-xs">
+                      {reportData.circumstances || "—"}
+                    </span>
                   </div>
                   <Separator />
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Police Report:</span>
-                    <span className="text-xs">{reportData.policeReportNumber || "No"}</span>
+                    <span className="text-muted-foreground">
+                      Police Report:
+                    </span>
+                    <span className="text-xs">
+                      {reportData.policeReportNumber || "No"}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Insurance:</span>
                     <span>{reportData.insuranceClaim ? "Yes" : "No"}</span>
                   </div>
-                  
+
                   {/* Status badges */}
                   <Separator />
                   <div className="space-y-2">
-                    <span className="text-muted-foreground text-sm">Options:</span>
+                    <span className="text-muted-foreground text-sm">
+                      Options:
+                    </span>
                     <div className="flex flex-wrap gap-1">
                       {reportData.notifyCarrier && (
-                        <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                        >
                           Notify Carrier
                         </Badge>
                       )}
                       {reportData.urgentFlag && (
-                        <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-red-50 text-red-700 border-red-200"
+                        >
                           Urgent
                         </Badge>
                       )}
                       {!reportData.notifyCarrier && !reportData.urgentFlag && (
-                        <span className="text-xs text-muted-foreground">None</span>
+                        <span className="text-xs text-muted-foreground">
+                          None
+                        </span>
                       )}
                     </div>
                   </div>
@@ -816,7 +982,9 @@ export default function ReportTheftPage() {
             <Alert>
               <IconAlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                This report will immediately change the device status to "Stolen" and may trigger notifications to carriers and authorities.
+                This report will immediately change the device status to
+                "Stolen" and may trigger notifications to carriers and
+                authorities.
               </AlertDescription>
             </Alert>
           </div>
@@ -825,29 +993,36 @@ export default function ReportTheftPage() {
         {/* Form Actions */}
         <Card>
           <CardFooter className="flex justify-between">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={handleReset}
               disabled={isSubmitting}
             >
               Reset Form
             </Button>
             <div className="flex gap-2">
-              <Button 
-                type="button" 
-                variant="ghost" 
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => navigate(-1)}
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button 
-                type="submit" 
-                disabled={isSubmitting || !reportData.imei || !reportData.incidentDate || !reportData.location}
+              <Button
+                type="submit"
+                disabled={
+                  isSubmitting ||
+                  !reportData.imei ||
+                  !reportData.incidentDate ||
+                  !reportData.location
+                }
                 className="gap-2 bg-red-600 hover:bg-red-700"
               >
-                {isSubmitting && <IconLoader2 className="h-4 w-4 animate-spin" />}
+                {isSubmitting && (
+                  <IconLoader2 className="h-4 w-4 animate-spin" />
+                )}
                 {isSubmitting ? "Submitting Report..." : "Submit Theft Report"}
               </Button>
             </div>
@@ -855,5 +1030,5 @@ export default function ReportTheftPage() {
         </Card>
       </form>
     </>
-  )
+  );
 }
