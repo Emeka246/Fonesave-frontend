@@ -562,12 +562,10 @@ export default function ReportTheftPage() {
                     placeholder="Leave a message for whoever finds your phone (e.g., 'Please return my phone and get 10,000 naira reward', 'Contact me at +234...', etc.)"
                     value={reportData.ownerMessage}
                     onChange={(e) => {
-                      if (e.target.value.length <= 110) {
-                        handleInputChange("ownerMessage", e.target.value);
-                      }
+                      const input = e.target.value.slice(0, 110); // ✅ force limit
+                      handleInputChange("ownerMessage", input);
                     }}
                     rows={3}
-                    maxLength={110}
                     className={errors.ownerMessage ? "border-red-500" : ""}
                   />
 
