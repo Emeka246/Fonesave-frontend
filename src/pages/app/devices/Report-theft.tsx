@@ -559,34 +559,32 @@ export default function ReportTheftPage() {
                   <Label htmlFor="ownerMessage">Message for Finder *</Label>
                   <Textarea
                     id="ownerMessage"
-                    placeholder="Briefly describe how your phone was lost (max 120 characters)"
+                    placeholder="Leave a message for whoever finds your phone (e.g., 'Please return my phone and get 10,000 naira reward', 'Contact me at +234...', etc.)"
                     value={reportData.ownerMessage}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "ownerMessage",
-                        e.target.value.slice(0, 120)
-                      )
-                    }
+                    onChange={(e) => {
+                      if (e.target.value.length <= 110) {
+                        handleInputChange("ownerMessage", e.target.value);
+                      }
+                    }}
                     rows={3}
-                    maxLength={120}
+                    maxLength={110}
                     className={errors.ownerMessage ? "border-red-500" : ""}
                   />
 
-                  {/* Character Counter */}
-                  <p className="text-xs text-gray-500 text-right">
-                    {reportData.ownerMessage.length}/120 characters
-                  </p>
+                  {/* Character counter */}
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <p>
+                      This message will be displayed to anyone who searches for
+                      your device's IMEI number
+                    </p>
+                    <span>{reportData.ownerMessage.length}/110</span>
+                  </div>
 
                   {errors.ownerMessage && (
                     <p className="text-sm text-red-600">
                       {errors.ownerMessage}
                     </p>
                   )}
-
-                  <p className="text-xs text-gray-500">
-                    This message will be displayed to anyone who searches for
-                    your device's IMEI number.
-                  </p>
                 </div>
               </CardContent>
             </Card>
