@@ -562,20 +562,27 @@ export default function ReportTheftPage() {
                     placeholder="Leave a message for whoever finds your phone (e.g., 'Please return my phone and get 10,000 naira reward', 'Contact me at +234...', etc.)"
                     value={reportData.ownerMessage}
                     onChange={(e) =>
-                      handleInputChange("ownerMessage", e.target.value)
+                      handleInputChange(
+                        "ownerMessage",
+                        e.target.value.slice(0, 110)
+                      )
                     }
                     rows={3}
+                    maxLength={110} // ✅ added
                     className={errors.ownerMessage ? "border-red-500" : ""}
                   />
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <p>
+                      This message will be displayed to anyone who searches for
+                      your device's IMEI number
+                    </p>
+                    <span>{reportData.ownerMessage.length}/110</span>
+                  </div>
                   {errors.ownerMessage && (
                     <p className="text-sm text-red-600">
                       {errors.ownerMessage}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500">
-                    This message will be displayed to anyone who searches for
-                    your device's IMEI number
-                  </p>
                 </div>
               </CardContent>
             </Card>
