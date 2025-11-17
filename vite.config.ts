@@ -19,8 +19,8 @@ export default defineConfig({
       '127.0.0.1',
       'ff3c6906b21f.ngrok-free.app',
       'orca-app-jqn6c.ondigitalocean.app', // ✅ DigitalOcean frontend
-      'fonsave.com',                        // ✅ your main domain
-      'www.fonsave.com'                     // ✅ www version
+      'foneowner.com',                        // ✅ your main domain
+      'www.foneowner.com'                     // ✅ www version
     ],
   },
   build: {
