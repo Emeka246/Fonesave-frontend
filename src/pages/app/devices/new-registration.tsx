@@ -422,7 +422,7 @@ export default function NewRegistrationPage() {
       <div>
         <h1 className="text-lg md:text-3xl font-bold">Register New Device</h1>
         <p className="text-xs md:text-base text-muted-foreground">
-          Add a new device to your FonSave list
+          Add a new device to your FoneOwner list
         </p>
       </div>
 
@@ -1185,8 +1185,9 @@ export default function NewRegistrationPage() {
                 <div className="text-xs text-muted-foreground">
                   <p>
                     This annual fee covers 12 months of device protection. Your
-                    device will be registered on the FonSave platform and you'll
-                    receive alerts if your device is reported stolen or missing.
+                    device will be registered on the FoneOwner platform and
+                    you'll receive alerts if your device is reported stolen or
+                    missing.
                   </p>
                   <p className="mt-2">
                     {!isAgent() || paymentMethod === "paystack"

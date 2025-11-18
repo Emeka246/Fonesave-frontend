@@ -211,7 +211,7 @@ export default function DeviceByIdInput() {
 
               <div className="space-y-2 mb-4">
                 <h3 className="font-semibold text-lg text-gray-900">
-                  This IMEI is not registered on FonSave
+                  This IMEI is not registered on FoneOwner
                 </h3>
                 <p className="text-sm text-gray-600">
                   Register Your Phone Now,

@@ -11,9 +11,9 @@ import { useNavigate } from "react-router-dom";
 const faqData = [
   {
     id: "faq-1",
-    question: "What is Fonsave?",
+    question: "What is FoneOwner?",
     answer:
-      "FonSave is a digital platform that helps you protect your phone. You can to mark your phone as stolen or safe, making it easier to recover your device or prevent others from buying stolen phones. FonSave also gives agents the opportunity to earn money by helping others register their phones.",
+      "FoneOwner is a digital platform that helps you protect your phone. You can to mark your phone as stolen or safe, making it easier to recover your device or prevent others from buying stolen phones. FoneOwner also gives agents the opportunity to earn money by helping others register their phones.",
   },
   {
     id: "faq-2",
@@ -23,7 +23,7 @@ const faqData = [
   },
   {
     id: "faq-3",
-    question: "Why should I register my phone on Fonsave?",
+    question: "Why should I register my phone on FoneOwner?",
     answer:
       "To prove ownership of your device. To mark your phone as stolen if it gets lost. To prevent stolen phones from being resold. To give buyers confidence when purchasing used phones.",
   },
@@ -49,7 +49,7 @@ const faqData = [
     id: "faq-7",
     question: "What happens if my phone is stolen?",
     answer:
-      "Log in to your Fonsave account and mark your device as Stolen. This status will appear in searches, alerting potential buyers not to purchase it.",
+      "Log in to your FoneOwner account and mark your device as Stolen. This status will appear in searches, alerting potential buyers not to purchase it.",
   },
   {
     id: "faq-8",
@@ -59,13 +59,13 @@ const faqData = [
   },
   {
     id: "faq-9",
-    question: "How do I delete my Fonsave account?",
+    question: "How do I delete my FoneOwner account?",
     answer:
       "If you wish to delete your account: Log in to your dashboard. Go to Dashboard > Profile > Delete Account. Confirm the deletion. ⚠️ Warning: Deleting your account will remove all your registered devices and cannot be undone.",
   },
   {
     id: "faq-10",
-    question: "Is my data safe with Fonsave?",
+    question: "Is my data safe with FoneOwner?",
     answer:
       "Yes. We take privacy and security seriously. Your IMEI and personal information are encrypted and protected. We never sell your data to third parties.",
   },
