@@ -15,7 +15,8 @@ export default function TermsConditions() {
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-lg">
-            Welcome to Fonsave.com. By accessing or using our platform, you agree to the following:
+            Welcome to Foneowner.com. By accessing or using our platform, you
+            agree to the following:
           </p>
 
           <div className="space-y-6">
@@ -35,7 +36,8 @@ export default function TermsConditions() {
                 Use of Service
               </h3>
               <p className="text-muted-foreground">
-                You agree to register your own device(s) only and not submit false IMEI numbers.
+                You agree to register your own device(s) only and not submit
+                false IMEI numbers.
               </p>
             </div>
 
@@ -45,7 +47,9 @@ export default function TermsConditions() {
                 Payments
               </h3>
               <p className="text-muted-foreground">
-                All registrations are charged yearly per device. Agents may charge extra fees to customers, but the platform fee remains fixed.
+                All registrations are charged yearly per device. Agents may
+                charge extra fees to customers, but the platform fee remains
+                fixed.
               </p>
             </div>
 
@@ -55,7 +59,8 @@ export default function TermsConditions() {
                 Prohibited Actions
               </h3>
               <p className="text-muted-foreground">
-                No fraudulent use of IMEIs, resale of stolen phones, or attempts to hack/manipulate the platform.
+                No fraudulent use of IMEIs, resale of stolen phones, or attempts
+                to hack/manipulate the platform.
               </p>
             </div>
 
@@ -68,7 +73,6 @@ export default function TermsConditions() {
                 We may suspend accounts that violate these rules.
               </p>
             </div>
-
           </div>
         </CardContent>
       </Card>

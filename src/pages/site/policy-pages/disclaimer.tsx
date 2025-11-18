@@ -11,7 +11,7 @@ export default function Disclaimer() {
             Disclaimer
           </CardTitle>
           <p className="text-center text-muted-foreground text-lg mt-4">
-            Important information regarding the use of fonsave.com services
+            Important information regarding the use of foneowner.com services
           </p>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -19,9 +19,13 @@ export default function Disclaimer() {
             <div className="flex items-start gap-3">
               <AlertTriangle className="h-6 w-6 text-red-600 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="text-lg font-semibold mb-2 text-red-800 dark:text-red-200">Device Recovery Guarantee</h3>
+                <h3 className="text-lg font-semibold mb-2 text-red-800 dark:text-red-200">
+                  Device Recovery Guarantee
+                </h3>
                 <p className="text-red-700 dark:text-red-300">
-                  Fonsave.com does not guarantee recovery of stolen devices. Our service is designed to help prevent resale of stolen phones and support community awareness.
+                  Foneowner.com does not guarantee recovery of stolen devices.
+                  Our service is designed to help prevent resale of stolen
+                  phones and support community awareness.
                 </p>
               </div>
             </div>
@@ -33,9 +37,12 @@ export default function Disclaimer() {
                 <XCircle className="h-6 w-6  mt-1" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-3">Service Limitations</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Service Limitations
+                </h3>
                 <p className="text-muted-foreground">
-                  We are not responsible for losses caused by theft, incorrect IMEI submission, or third-party misuse.
+                  We are not responsible for losses caused by theft, incorrect
+                  IMEI submission, or third-party misuse.
                 </p>
               </div>
             </div>
@@ -45,9 +52,12 @@ export default function Disclaimer() {
                 <Search className="h-6 w-6  mt-1" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-3">Search Results Accuracy</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Search Results Accuracy
+                </h3>
                 <p className="text-muted-foreground">
-                  Search results reflect data entered by users; we cannot guarantee completeness or accuracy.
+                  Search results reflect data entered by users; we cannot
+                  guarantee completeness or accuracy.
                 </p>
               </div>
             </div>
@@ -59,8 +69,10 @@ export default function Disclaimer() {
               <div>
                 <h3 className="text-lg font-semibold mb-2">Important Notice</h3>
                 <p className="">
-                  By using fonsave.com, you acknowledge that you have read, understood, and agree to this disclaimer. 
-                  If you do not agree with any part of this disclaimer, please discontinue use of our services immediately.
+                  By using foneowner.com, you acknowledge that you have read,
+                  understood, and agree to this disclaimer. If you do not agree
+                  with any part of this disclaimer, please discontinue use of
+                  our services immediately.
                 </p>
               </div>
             </div>
@@ -68,7 +80,8 @@ export default function Disclaimer() {
 
           <div className="text-center text-sm pt-4 border-t">
             <p>
-              This disclaimer is subject to change without notice. Please review periodically for updates.
+              This disclaimer is subject to change without notice. Please review
+              periodically for updates.
             </p>
           </div>
         </CardContent>
