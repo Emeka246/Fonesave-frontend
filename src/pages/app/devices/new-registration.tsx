@@ -316,7 +316,7 @@ export default function NewRegistrationPage() {
             toast.success(
               deviceRegistration.isFreeRegistration
                 ? "Device registered successfully using a free registration!"
-                : "We have sent You Email To Complete The Registration!",
+                : "We have sent Email To Complete The Registration!",
               {
                 duration: 10000, // show for 15 seconds
               }
@@ -530,7 +530,9 @@ export default function NewRegistrationPage() {
                           )}
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="ownerPhone">Device Owner Phone</Label>
+                          <Label htmlFor="ownerPhone">
+                            Device Owner's Phone Number
+                          </Label>
                           <Input
                             ref={(el) => {
                               fieldRefs.current["ownerPhone"] = el;
