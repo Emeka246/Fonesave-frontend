@@ -1,11 +1,12 @@
+import { SVGProps } from "react";
 import { cn } from "@/lib/utils";
 
-export function AppLogo({ className }: { className?: string }) {
+export function AppLogo({ className }: SVGProps<SVGSVGElement>) {
   return (
     <img
-      src="/logo.png"
+      src="/logo.svg"
       alt="FoneOwner Logo"
-      className={cn("w-auto h-10", className)}
+      className={cn("h-10 w-auto", className)}
     />
   );
 }
