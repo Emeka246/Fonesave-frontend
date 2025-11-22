@@ -6,7 +6,10 @@ export function AppLogo({ className }: SVGProps<SVGSVGElement>) {
     <img
       src="/logo.svg"
       alt="FoneOwner Logo"
-      className={cn("h-14 w-auto", className)}
+      className={cn(
+        "h-12 w-auto md:h-14", // mobile = 12, desktop = 14
+        className
+      )}
     />
   );
 }
