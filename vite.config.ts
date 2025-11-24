@@ -18,7 +18,7 @@ export default defineConfig({
       'localhost',
       '127.0.0.1',
       'ff3c6906b21f.ngrok-free.app',
-      'orca-app-jqn6c.ondigitalocean.app', // ✅ DigitalOcean frontend
+      'squid-app-brwax.ondigitalocean.app', // ✅ DigitalOcean frontend
       'foneowner.com',                        // ✅ your main domain
       'www.foneowner.com'                     // ✅ www version
     ],
