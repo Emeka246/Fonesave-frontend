@@ -20,7 +20,9 @@ export default defineConfig({
       'ff3c6906b21f.ngrok-free.app',
       'squid-app-brwax.ondigitalocean.app', // ✅ DigitalOcean frontend
       'foneowner.com',                        // ✅ your main domain
-      'www.foneowner.com'                     // ✅ www version
+      'www.foneowner.com',
+	'fonsave.com',
+	'www.fonsave.com'                   // ✅ www version
     ],
   },
   build: {
