@@ -316,7 +316,7 @@ export default function NewRegistrationPage() {
             toast.success(
               deviceRegistration.isFreeRegistration
                 ? "Device registered successfully using a free registration!"
-                : "We have sent Email To Complete The Registration!",
+                : "We Have Sent Email To Complete The Registration!",
               {
                 duration: 10000, // show for 15 seconds
               }
