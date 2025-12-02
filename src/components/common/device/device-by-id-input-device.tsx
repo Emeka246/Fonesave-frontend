@@ -154,7 +154,7 @@ export default function DeviceByIdInput() {
                     d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 00-8 8z"
                   />
                 </svg>
-                <span>Checking IMEI...</span>
+                <span>Checking Phone Status...</span>
               </>
             ) : (
               <span>Check Phone Status</span>

@@ -135,10 +135,10 @@
   .panel {
     @apply bg-card rounded-3xl  p-6 md:p-10;
   }
-  .panel-inverse{
+  .panel-inverse {
     @apply bg-card-foreground rounded-3xl p-10;
   }
-  .dark .panel-inverse{
+  .dark .panel-inverse {
     @apply bg-card rounded-3xl p-10;
   }
   .panel-accent {
@@ -170,7 +170,7 @@
   .section-title {
     @apply text-xl lg:text-5xl font-bold text-primary leading-tight mb-2 md:mb-4;
   }
-  .section-title-sm{
+  .section-title-sm {
     @apply text-xl lg:text-3xl font-bold text-primary leading-tight mb-2 md:mb-4;
   }
   .section-subtitle {
@@ -180,17 +180,19 @@
     @apply text-sm lg:text-base text-muted-foreground mb-4;
   }
 
-
   /* icon */
-  .icon-size{
+  .icon-size {
     @apply size-8 md:size-12 text-primary;
   }
 
-
-
   .grainy-bg {
-    background: #2A7B9B;
-    background: linear-gradient(0deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
+    background: #2a7b9b;
+    background: linear-gradient(
+      0deg,
+      rgba(42, 123, 155, 1) 0%,
+      rgba(87, 199, 133, 1) 50%,
+      rgba(237, 221, 83, 1) 100%
+    );
     position: relative;
     min-height: 100vh;
     overflow: hidden;
@@ -211,9 +213,20 @@
     aspect-ratio: 1;
     display: grid;
     border-radius: 50%;
-    background:
-      linear-gradient(0deg ,rgb(255 255 255/50%) 30%,#0000 0 70%,rgb(255 255 255/100%) 0) 50%/8% 100%,
-      linear-gradient(90deg,rgb(255 255 255/25%) 30%,#0000 0 70%,rgb(255 255 255/75%) 0) 50%/100% 8%;
+    background: linear-gradient(
+          0deg,
+          rgb(255 255 255/50%) 30%,
+          #0000 0 70%,
+          rgb(255 255 255/100%) 0
+        )
+        50%/8% 100%,
+      linear-gradient(
+          90deg,
+          rgb(255 255 255/25%) 30%,
+          #0000 0 70%,
+          rgb(255 255 255/75%) 0
+        )
+        50%/100% 8%;
     background-repeat: no-repeat;
     animation: l23 1s infinite steps(12);
   }
@@ -231,7 +244,9 @@
     transform: rotate(60deg);
   }
   @keyframes l23 {
-    100% {transform: rotate(1turn)}
+    100% {
+      transform: rotate(1turn);
+    }
   }
 }
 
@@ -248,7 +263,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) scale(1);
   }
   50% {
@@ -257,7 +273,8 @@
 }
 
 @keyframes gradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -276,3 +293,7 @@
 .animate-gradient {
   animation: gradient 15s ease infinite;
 }
+/* TEMPORARY: Zoom website for HD screen recordings 
+body {
+  zoom: 170%;
+}*/
