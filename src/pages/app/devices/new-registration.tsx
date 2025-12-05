@@ -121,17 +121,10 @@ export default function NewRegistrationPage() {
     try {
       const res = await DeviceService.searchDeviceByIMEI(imei);
 
-      if (res?.success && res?.data) {
-        // IMEI exists
-        const copy = [...imeiValidations];
-        copy[index] = false;
-        setImeiValidations(copy);
-        toast.error(`IMEI ${imei} is already registered.`);
+      if (res?.data?.success && res?.data?.data) {
+        return res.data.data; // the device found
       } else {
-        // IMEI is available
-        const copy = [...imeiValidations];
-        copy[index] = true;
-        setImeiValidations(copy);
+        return null;
       }
     } catch (error) {
       console.log(error);
