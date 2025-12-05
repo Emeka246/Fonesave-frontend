@@ -53,9 +53,8 @@ const CountrySelect = forwardRef<HTMLButtonElement, CountrySelectProps>(
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent
-            className="max-h-[300px]"
-            onCloseAutoFocus={(e) => e.preventDefault()}
-            onOpenAutoFocus={(e) => e.preventDefault()}
+            className="max-h-[250px] overflow-y-auto"
+            onCloseAutoFocus={(e: Event) => e.preventDefault()}
           >
             {countries.map((country: Country) => (
               <SelectItem key={country.code} value={country.code}>

@@ -119,7 +119,7 @@ export default function NewRegistrationPage() {
     if (!imei || imei.length < 14) return;
 
     try {
-      const res = await DeviceService.searchDeviceByImei(imei);
+      const res = await DeviceService.searchDeviceByIMEI(imei);
 
       if (res?.success && res?.data) {
         // IMEI exists
