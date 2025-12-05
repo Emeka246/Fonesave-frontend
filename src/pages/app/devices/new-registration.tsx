@@ -595,13 +595,15 @@ export default function NewRegistrationPage() {
                           }}
                           placeholder="Enter primary IMEI number (required)"
                           value={formData.imei1 || ""}
-                          onChange={(e) => {
-                            const value = e.target.value
+                          onChange={async (e) => {
+                            // Allow only numbers (no alphabets)
+                            let value = e.target.value
                               .replace(/\D/g, "")
                               .slice(0, 15);
+
                             handleInputChange("imei1", value);
 
-                            // Validate IMEI using Luhn Algorithm
+                            // Luhn IMEI validation
                             const isValid =
                               value.length === 15 &&
                               value
@@ -618,7 +620,19 @@ export default function NewRegistrationPage() {
                                 10 ===
                                 0;
 
+                            // Set IMEI validation
                             setImeiValidations((prev) => [isValid, prev[1]]);
+
+                            // Check for duplicate IMEI (server)
+                            if (value.length === 15) {
+                              const existing = await checkImei(value, 1);
+                              if (existing) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  imei1: "This IMEI is already registered",
+                                }));
+                              }
+                            }
                           }}
                           maxLength={15}
                           className={errors.imei1 ? "border-red-500" : ""}
@@ -653,13 +667,14 @@ export default function NewRegistrationPage() {
                           }}
                           placeholder="Enter secondary IMEI number (optional)"
                           value={formData.imei2 || ""}
-                          onChange={(e) => {
-                            const value = e.target.value
+                          onChange={async (e) => {
+                            let value = e.target.value
                               .replace(/\D/g, "")
                               .slice(0, 15);
+
                             handleInputChange("imei2", value);
 
-                            // Validate IMEI using Luhn Algorithm
+                            // Luhn IMEI validation
                             const isValid =
                               value.length === 15 &&
                               value
@@ -677,6 +692,17 @@ export default function NewRegistrationPage() {
                                 0;
 
                             setImeiValidations((prev) => [prev[0], isValid]);
+
+                            // Check duplicate IMEI 2 (server)
+                            if (value.length === 15) {
+                              const existing = await checkImei(value, 2);
+                              if (existing) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  imei2: "This IMEI is already registered",
+                                }));
+                              }
+                            }
                           }}
                           maxLength={15}
                           className={errors.imei2 ? "border-red-500" : ""}
