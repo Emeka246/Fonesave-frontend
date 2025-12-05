@@ -114,6 +114,29 @@ export default function NewRegistrationPage() {
     null,
     null,
   ]);
+  // Function to check IMEI duplicate
+  const checkImei = async (imei: string, index: number) => {
+    if (!imei || imei.length < 14) return;
+
+    try {
+      const res = await DeviceService.searchDeviceByImei(imei);
+
+      if (res?.success && res?.data) {
+        // IMEI exists
+        const copy = [...imeiValidations];
+        copy[index] = false;
+        setImeiValidations(copy);
+        toast.error(`IMEI ${imei} is already registered.`);
+      } else {
+        // IMEI is available
+        const copy = [...imeiValidations];
+        copy[index] = true;
+        setImeiValidations(copy);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [agentRegistrationStats, setAgentRegistrationStats] =
     useState<AgentRegistrationStats>({
@@ -255,6 +278,11 @@ export default function NewRegistrationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Stop form if duplicated IMEI found
+    if (imeiValidations[0] === false || imeiValidations[1] === false) {
+      toast.error("One of the IMEIs is already registered.");
+      return;
+    }
 
     if (!validateForm()) {
       return;
