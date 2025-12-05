@@ -596,42 +596,52 @@ export default function NewRegistrationPage() {
                           placeholder="Enter primary IMEI number (required)"
                           value={formData.imei1 || ""}
                           onChange={async (e) => {
-                            // Allow only numbers (no alphabets)
                             let value = e.target.value
                               .replace(/\D/g, "")
                               .slice(0, 15);
-
                             handleInputChange("imei1", value);
 
-                            // Luhn IMEI validation
-                            const isValid =
-                              value.length === 15 &&
-                              value
-                                .split("")
-                                .reverse()
-                                .map(Number)
-                                .reduce((sum, digit, idx) => {
-                                  if (idx % 2 === 1) {
-                                    digit *= 2;
-                                    if (digit > 9) digit -= 9;
-                                  }
-                                  return sum + digit;
-                                }, 0) %
-                                10 ===
+                            // If empty → clear errors
+                            if (value.length === 0) {
+                              setImeiValidations((prev) => [null, prev[1]]);
+                              setErrors((prev) => ({ ...prev, imei1: "" }));
+                              return;
+                            }
+
+                            // If full length → validate
+                            if (value.length === 15) {
+                              const isValid =
+                                value
+                                  .split("")
+                                  .reverse()
+                                  .map(Number)
+                                  .reduce((sum, digit, idx) => {
+                                    if (idx % 2 === 1) {
+                                      digit *= 2;
+                                      if (digit > 9) digit -= 9;
+                                    }
+                                    return sum + digit;
+                                  }, 0) %
+                                  10 ===
                                 0;
 
-                            // Set IMEI validation
-                            setImeiValidations((prev) => [isValid, prev[1]]);
+                              setImeiValidations((prev) => [isValid, prev[1]]);
 
-                            // Check for duplicate IMEI (server)
-                            if (value.length === 15) {
-                              const existing = await checkImei(value, 1);
-                              if (existing) {
-                                setErrors((prev) => ({
-                                  ...prev,
-                                  imei1: "This IMEI is already registered",
-                                }));
+                              if (isValid) {
+                                const existing = await checkImei(value, 1);
+                                if (existing) {
+                                  setErrors((prev) => ({
+                                    ...prev,
+                                    imei1: "This IMEI is already registered",
+                                  }));
+                                } else {
+                                  setErrors((prev) => ({ ...prev, imei1: "" }));
+                                }
                               }
+                            } else {
+                              // Not full length → no error
+                              setImeiValidations((prev) => [null, prev[1]]);
+                              setErrors((prev) => ({ ...prev, imei1: "" }));
                             }
                           }}
                           maxLength={15}
@@ -648,7 +658,7 @@ export default function NewRegistrationPage() {
                       </p>
                     )}
 
-                    {imeiValidations[0] === false && (
+                    {imeiValidations[0] === false && !errors.imei1 && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
                         <IconAlertCircle className="h-4 w-4" />
                         Invalid IMEI format
@@ -671,37 +681,49 @@ export default function NewRegistrationPage() {
                             let value = e.target.value
                               .replace(/\D/g, "")
                               .slice(0, 15);
-
                             handleInputChange("imei2", value);
 
-                            // Luhn IMEI validation
-                            const isValid =
-                              value.length === 15 &&
-                              value
-                                .split("")
-                                .reverse()
-                                .map(Number)
-                                .reduce((sum, digit, idx) => {
-                                  if (idx % 2 === 1) {
-                                    digit *= 2;
-                                    if (digit > 9) digit -= 9;
-                                  }
-                                  return sum + digit;
-                                }, 0) %
-                                10 ===
+                            // If empty → clear errors
+                            if (value.length === 0) {
+                              setImeiValidations((prev) => [prev[0], null]);
+                              setErrors((prev) => ({ ...prev, imei2: "" }));
+                              return;
+                            }
+
+                            // If full length → validate
+                            if (value.length === 15) {
+                              const isValid =
+                                value
+                                  .split("")
+                                  .reverse()
+                                  .map(Number)
+                                  .reduce((sum, digit, idx) => {
+                                    if (idx % 2 === 1) {
+                                      digit *= 2;
+                                      if (digit > 9) digit -= 9;
+                                    }
+                                    return sum + digit;
+                                  }, 0) %
+                                  10 ===
                                 0;
 
-                            setImeiValidations((prev) => [prev[0], isValid]);
+                              setImeiValidations((prev) => [prev[0], isValid]);
 
-                            // Check duplicate IMEI 2 (server)
-                            if (value.length === 15) {
-                              const existing = await checkImei(value, 2);
-                              if (existing) {
-                                setErrors((prev) => ({
-                                  ...prev,
-                                  imei2: "This IMEI is already registered",
-                                }));
+                              if (isValid) {
+                                const existing = await checkImei(value, 2);
+                                if (existing) {
+                                  setErrors((prev) => ({
+                                    ...prev,
+                                    imei2: "This IMEI is already registered",
+                                  }));
+                                } else {
+                                  setErrors((prev) => ({ ...prev, imei2: "" }));
+                                }
                               }
+                            } else {
+                              // Not full length → no error
+                              setImeiValidations((prev) => [prev[0], null]);
+                              setErrors((prev) => ({ ...prev, imei2: "" }));
                             }
                           }}
                           maxLength={15}
@@ -718,7 +740,7 @@ export default function NewRegistrationPage() {
                       </p>
                     )}
 
-                    {imeiValidations[1] === false && (
+                    {imeiValidations[1] === false && !errors.imei2 && (
                       <p className="text-sm text-red-600 flex items-center gap-1">
                         <IconAlertCircle className="h-4 w-4" />
                         Invalid IMEI format
