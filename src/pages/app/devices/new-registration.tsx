@@ -602,9 +602,31 @@ export default function NewRegistrationPage() {
                           }}
                           placeholder="Enter primary IMEI number (required)"
                           value={formData.imei1 || ""}
-                          onChange={(e) =>
-                            handleInputChange("imei1", e.target.value)
-                          }
+                          onChange={(e) => {
+                            const value = e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 15);
+                            handleInputChange("imei1", value);
+
+                            // Validate IMEI using Luhn Algorithm
+                            const isValid =
+                              value.length === 15 &&
+                              value
+                                .split("")
+                                .reverse()
+                                .map(Number)
+                                .reduce((sum, digit, idx) => {
+                                  if (idx % 2 === 1) {
+                                    digit *= 2;
+                                    if (digit > 9) digit -= 9;
+                                  }
+                                  return sum + digit;
+                                }, 0) %
+                                10 ===
+                                0;
+
+                            setImeiValidations((prev) => [isValid, prev[1]]);
+                          }}
                           maxLength={15}
                           className={errors.imei1 ? "border-red-500" : ""}
                         />
@@ -638,9 +660,31 @@ export default function NewRegistrationPage() {
                           }}
                           placeholder="Enter secondary IMEI number (optional)"
                           value={formData.imei2 || ""}
-                          onChange={(e) =>
-                            handleInputChange("imei2", e.target.value)
-                          }
+                          onChange={(e) => {
+                            const value = e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 15);
+                            handleInputChange("imei2", value);
+
+                            // Validate IMEI using Luhn Algorithm
+                            const isValid =
+                              value.length === 15 &&
+                              value
+                                .split("")
+                                .reverse()
+                                .map(Number)
+                                .reduce((sum, digit, idx) => {
+                                  if (idx % 2 === 1) {
+                                    digit *= 2;
+                                    if (digit > 9) digit -= 9;
+                                  }
+                                  return sum + digit;
+                                }, 0) %
+                                10 ===
+                                0;
+
+                            setImeiValidations((prev) => [prev[0], isValid]);
+                          }}
                           maxLength={15}
                           className={errors.imei2 ? "border-red-500" : ""}
                         />
