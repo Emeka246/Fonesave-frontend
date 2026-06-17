@@ -18,7 +18,7 @@ export default defineConfig({
       'localhost',
       '127.0.0.1',
       'ff3c6906b21f.ngrok-free.app',
-      'squid-app-brwax.ondigitalocean.app',
+      'orca-app-842yf.ondigitalocean.app',
       'foneowner.com',
       'www.foneowner.com',
       'fonsave.com',
