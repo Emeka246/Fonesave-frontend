@@ -35,7 +35,7 @@ class ConfigService {
       appVersion: this.getEnvVar("VITE_APP_VERSION", "1.0.0"),
       enableAnalytics: this.getBooleanEnvVar("VITE_ENABLE_ANALYTICS", false),
       enableDebug: this.getBooleanEnvVar("VITE_ENABLE_DEBUG", false),
-      googleAuthUrl: `${baseUrl}/${this.getOptionalEnvVar("VITE_GOOGLE_AUTH_URL") || ""}`,
+      googleAuthUrl: `${baseUrl}/auth/google`,
       cookieDomain: this.getOptionalEnvVar("VITE_COOKIE_DOMAIN"),
     };
   }
