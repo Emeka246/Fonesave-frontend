@@ -157,7 +157,7 @@ export const SiteFooter = () => {
           </div>
           <div className="border-t border-zinc-200 pt-8 flex flex-col sm:flex-row justify-between items-center">
             <p className="text-zinc-500 text-sm">
-              © 2025 FoneOwner. All rights reserved.
+              © 2026 FoneOwner. All rights reserved.
             </p>
           </div>
         </div>
