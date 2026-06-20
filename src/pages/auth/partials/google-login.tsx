@@ -14,8 +14,7 @@ export function GoogleLogin() {
     // Store return path in session storage (survives page redirects)
     sessionStorage.setItem("oauthReturnPath", returnTo);
 
-    console.log("FULL CONFIG", config);
-    console.log("GOOGLE URL", config.googleAuthUrl);
+    console.log("Google login clicked", config.googleAuthUrl);
     window.location.href =
       config.googleAuthUrl || "https://accounts.google.com/o/oauth2/auth";
   };
